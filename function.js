@@ -31,7 +31,7 @@ if(jetzte<da1.getTime()){heutag=0}
 if(jetzte>da1.getTime()&& jetzte<da2.getTime()){heutag=1}
 if(jetzte>da2.getTime()&& jetzte<da3.getTime()){heutag=2}
 if(jetzte>da3.getTime()&& jetzte<da4.getTime()){heutag=3}
-heutag= 1
+heutag= 0
 ///// heutag ist der tag  1 2 3 des events als integer
 console.log('Heutag = ' +heutag)
 
@@ -105,9 +105,10 @@ setTimeout(function(){
   arrowHead.remove()
 },ttl*1000)
 }
+dingenskirchen = "AIzaSyBOOdW1SHCwBZSchUJ7DfJZ1a7-dEYTvuQ"
 function initialise_firebase(){
   const firebaseConfig = {
-          apiKey: "AIzaSyBOOdW1SHCwBZSchUJ7DfJZ1a7-dEYTvuQ",
+          apiKey: dingenskirchen,
           authDomain: "crowdcount-678c8.firebaseapp.com",
           databaseURL: "https://crowdcount-678c8-default-rtdb.europe-west1.firebasedatabase.app",
           projectId: "crowdcount-678c8",

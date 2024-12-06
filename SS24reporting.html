@@ -332,7 +332,7 @@ function writeReportToFirebase() {
     return;
   }
 const database = firebase.database();
-heutag =0 // das hier ist nur für testmodus, bitte rausfinden wie hautag berechnet bzw eingestellt wird
+
   databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("zeit");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
