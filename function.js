@@ -105,10 +105,9 @@ setTimeout(function(){
   arrowHead.remove()
 },ttl*1000)
 }
-dingenskirchen = "AIzaSyBOOdW1SHCwBZSchUJ7DfJZ1a7-dEYTvuQ"
 function initialise_firebase(){
   const firebaseConfig = {
-          apiKey: dingenskirchen,
+          apiKey: "AIzaSyBOOdW1SHCwBZSchUJ7DfJZ1a7-dEYTvuQ",
           authDomain: "crowdcount-678c8.firebaseapp.com",
           databaseURL: "https://crowdcount-678c8-default-rtdb.europe-west1.firebasedatabase.app",
           projectId: "crowdcount-678c8",
