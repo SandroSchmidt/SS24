@@ -60,58 +60,58 @@
 <script>
   // die logic der variablen ist C- camcounts, S- Scanns, West east VIB, In OUT - bsp sei -> scanns vom eastgate in
 function write_camcounts(){
-  heutag = 3
+  
   jetzt = new Date()
-  databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("zeit");
+  databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("zeit");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
               currentArray.push(jetzt.getTime());
         return currentArray;
              });
       
-  databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("East-Gate IN");
+  databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("East-Gate IN");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(cei));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("East-Gate OUT");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("East-Gate OUT");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(ceo));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("West-Gate IN");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("West-Gate IN");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(cwi));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("West-Gate OUT");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("West-Gate OUT");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(cwo));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("VIB-Gate IN");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("VIB-Gate IN");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(cvi));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("VIB-Gate OUT");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("VIB-Gate OUT");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(cvo));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("IN");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("IN");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(cei+cvi+cwi);
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/camcounts').child("OUT");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("OUT");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(ceo+cwo+cvo);
@@ -123,50 +123,50 @@ function write_camcounts(){
    
 function write_scans(){
   jetzt = new Date()
-  databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("zeit");
+  databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("zeit");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
               currentArray.push(jetzt.getTime());
         return currentArray;
              });
       
-  databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("East-Gate IN");
+  databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("East-Gate IN");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(sei));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("East-Gate OUT");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("East-Gate OUT");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(seo));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("West-Gate IN");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("West-Gate IN");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(swi));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("West-Gate OUT");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("West-Gate OUT");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(swo));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("VIB-Gate IN");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("VIB-Gate IN");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(svi));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("VIB-Gate OUT");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("VIB-Gate OUT");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt(svo));
               return currentArray;
              });
-             databaseRef = database.ref('soundstorm/SS23aux/day'+heutag+'/scans').child("scan_fazit");
+             databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("scan_fazit");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
              currentArray.push(parseInt((swi+svi+swi)-(svo+swo+seo)));

@@ -139,6 +139,7 @@
 </body>
 
 <script>
+       imageBounds = [[ 25.00124, 46.49093],[24.99111, 46.5245]];
  dens_slider = d3.select('#hierdensityslider')
  tens_slider = d3.select('#hiertensionslider')
  usage_slider = d3.select('#hierusageslider')
@@ -252,7 +253,7 @@ function update_ownpos(){
    infotag.text('status: own loc upt at '+ set_pos +" " + a.getHours()+":"+a.getMinutes()+":"+a.getSeconds())
    a =a.getTime()
    const database = firebase.database()
-     databaseRef = database.ref('soundstorm').child('locations').child(set_name);
+     databaseRef = database.ref('soundstorm').child('locations24').child(set_name);
     databaseRef.set({zeit:a,ort:set_pos})
            
         }

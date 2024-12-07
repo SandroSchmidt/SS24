@@ -1,5 +1,6 @@
 parking_list ={geo:[],tooltip:[],usage:[]}
 
+
 fenster = {hoehe:window.innerHeight-30,breite:window.innerWidth-35};
 existing_markers=[]
 
@@ -11,7 +12,11 @@ set_name ="wrong reporter"
 set_pos=[9,9]
 eventloc = [0,0]
 
-farbskala = ["lightblue","#00B0F0","#00B0F0","#92D050","#92D050","#FFFF00","#FFFF00","#FF9201","#FF9201","#FF0000",'red',"#ee00ff","#ee00ff","#ee00ff","#ee00ff","#ee00ff"]
+farbskala = [
+  "lightblue","#00B0F0","#00B0F0","#92D050","#92D050","#FFFF00",
+  "#FFFF00","#FF9201","#FF9201","#FF0000",'red',"#ee00ff","#ee00ff",
+  "#ee00ff","#ee00ff","#ee00ff"
+]
 
 
 list_of_reporters = ["demo","sandro","marcel","medical","mark",
@@ -31,14 +36,14 @@ if(jetzte<da1.getTime()){heutag=0}
 if(jetzte>da1.getTime()&& jetzte<da2.getTime()){heutag=1}
 if(jetzte>da2.getTime()&& jetzte<da3.getTime()){heutag=2}
 if(jetzte>da3.getTime()&& jetzte<da4.getTime()){heutag=3}
-heutag= 0
-///// heutag ist der tag  1 2 3 des events als integer
+
+
+heutag= 0///// heutag ist der tag  1 2 3 des events als integer
+
 console.log('Heutag = ' +heutag)
 
 
-
-
-
+swipes_arr =[]
 
 
 
@@ -51,55 +56,65 @@ locked = true
 
 
 function read_a_day(jahr,tager){
-  database = firebase.database();
+  console.log("reading a day: year: "+ jahr+ " - day " + tager)
 
   ref = database.ref('/soundstorm/SS'+jahr+'/day'+tager);
   ref.on('value', (snapshot) => {
   daydata = snapshot.val()
+
   graphdata={}
   Object.keys(daydata).forEach((key) => {
 for (k=0;k<stages_list.length;k++){
-  if (key == stages_list[k]){capacity= stages_list[k].capacity}
+  if (key == stages_list[k].name){capacity= stages_list[k].capacity}
 }
 
 
-    graphdata[key]=make_graphdata_stages(daydata[key],capacity)
+    graphdata[key]=make_graphdata_stages(daydata[key],capacity,tager)
     })
 
-sum_onsite = new Array(53).fill(0)
+sum_onsite = new Array(53)//.fill(0)
 timp =[] 
 
 for(i=0;i<sum_onsite.length;i++){
     
-    
+    pq=0
     Object.keys(graphdata).forEach((key) => {
-     if(graphdata[key].usage[i] != undefined) {    sum_onsite[i] += graphdata[key].usage[i]}
-    
+     if(graphdata[key].usage[i] != undefined) {  
+      if(sum_onsite[i] == undefined)[sum_onsite[i] =0]
+      sum_onsite[i] += (graphdata[key].usage[i]*stages_list[pq].capacity)/100}
+    pq++
     })
     
     }      
 
-    graphdata.sum_onsite = {usage:sum_onsite,zeit:graphdata["Big Beast Left"].zeit}
+    total_people = {usage:sum_onsite,zeit:graphdata["Big Beast Left"].zeit}
+
+   
 
 
 
-
-
-    initialise_chart()
+    refresh()
+    
 return graphdata
 })
 }
 
-function draw_arrow(von,nach,farbe,dicke,ttl,meldender){
+function draw_arrow(newswipe){
+  console.log(newswipe.zeit )
+  ttl = 3-((jetzt2.getTime() -newswipe.zeit)/1000) 
+  console.log("kkk" + ttl)
+  console.log('sd' + newswipe.zeit)
+  ttl = Math.max(0,ttl)  
+  //ttl = 10
  farbe = "green"
-  if (dicke>5){farbe = "lime"}
-  if (dicke>10){farbe = "red"}
-  if(meldender == "sandro"){farbe="black"; dicke=10}
-  var polyline = L.polyline([von,nach],{weight:dicke,color:farbe}).bindTooltip(meldender).addTo(movement_layer);
+  if (newswipe.dicke>5){farbe = "lime"}
+  if (newswipe.dicke>10){farbe = "red"}
+  if(newswipe.meldender == "sandro"){farbe="black"; newswipe.dicke=10}
+  var polyline = L.polyline([newswipe.von,newswipe.nach],{weight:newswipe.dicke,color:farbe}).bindTooltip(newswipe.meldender).addTo(movement_layer);
   var arrowHead = L.polylineDecorator(polyline, {    patterns: [   
        { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ 
-        pixelSize: dicke, polygon: false, 
-        pathOptions: { fillOpacity: 1, weight:dicke,color:farbe } }) }    ]}).addTo(movement_layer);
+        pixelSize: newswipe.dicke, polygon: false, 
+        pathOptions: { fillOpacity: 1, weight:newswipe.dicke,color:farbe } }) }    ]}).addTo(movement_layer);
 setTimeout(function(){
   polyline.remove()
   arrowHead.remove()
@@ -139,7 +154,7 @@ function initialise_firebase(){
             showline:true,
               tickformat: '%H:%M',  // Format for displaying date on x-axis
                 //range: [a, b],
-                range: ['2023-12-14 14:00:00', '2023-12-15 04:00:00'],
+                range: ['2024-12-06 10:00:00', '2024-12-07 04:00:00'],
                 linecolor: 'black',
                 linewidth: 2,
                 mirror: true
@@ -206,10 +221,29 @@ function initialise_firebase(){
             k++
           }
 function read_current (){
-
+  // ich glaube diese funktion wird nur einmal aufgerufen weil connections zu firebas dann automatisch upgedatet werden
+console.log("reading current...")
   database = firebase.database();
 
 
+   databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/swipes');
+                                       // Listen for changes in the database
+                                      databaseRef.on('value', (snapshot) => {
+                                        if (snapshot.exists()) {
+                                          swipes_arr = snapshot.val();
+                                          console.log("Updated swipes array:", swipes_arr);
+                                          // Add any logic here to handle updates in the array (e.g., re-render UI)
+                                     
+                                          jetzt2 = new Date()
+                                          swipes_arr.forEach(draw_arrow)
+                                        } else {
+                                          console.log("No data available");
+                                        }
+                                      }); 
+                                      // Save the initial array to Firebase
+                                     
+
+                                      
 
 
 
@@ -271,56 +305,9 @@ for(i=0;i<medstations.length;i++){
 //select_area(set_area)
 });
 
-ref = database.ref('/soundstorm/locations');
-
-ref.on('value', (snapshot) => {
-
-locations = snapshot.val()
 
 
-markercounter =0 
-Object.keys(locations).forEach((key) => {
-  a = new Date().getTime()
-    if(key.startsWith("marker")){
-      b= locations[key].zeit
-      age = (a - b )/1000
-      ttl = parseInt(300-age)
-
-
-         if (locations[key].zeige == true && ttl>0) {
-         
-      markercounter++;
-      milk = L.marker(locations[key].ort,{icon:eventicon}).addTo(eigensymbole_layer)
-      .bindTooltip(locations[key].text)
-
-      setTimeout(function (){milk.remove()},180000)
-      }
-
-  //  .bindPopup(locations[key].text)
-//  .bindTooltip("marker "+markercounter)
-
-}else
-    {if(existing_markers.includes(key)) {
-
-eval(key+"_marker.setLatLng(locations[key].ort)")
-
-}else{ temp = new Date(locations[key].zeit)
-
-  if(temp.getMinutes() <10){templn ="0"}else{templn=""}
-  temp = temp.getHours()+":"+templn+temp.getMinutes()
-    
-eval(key+"_marker = L.marker(locations[key].ort).bindPopup(key+' at '+temp).addTo(eigensymbole_layer)")
-  // hier die marker einmalen
-existing_markers.push(key)
-}
-
-
-}
-  
-
-})
-})
-
+/*
 swipes_arr = {
   "1702643125700": {
     "dicke": 5,
@@ -466,7 +453,7 @@ swipes_arr = {
     "zeit": 1702647275265
   }
 }
-/*
+
 ref = database.ref('/soundstorm/swipes');
 
 ref.on('value', (snapshot) => {
@@ -533,14 +520,28 @@ var Jawg_Matrix =  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{
 });
 
 
+imageUrl ="./zeichnung.svg"
+
+ imageOverlay = L.imageOverlay(imageUrl, imageBounds);
+
+
 
 //const imageUrl = './map1.png';
 //const imageBounds = [ [25.013,46.4805],[24.988092848232725, 46.53216767460525]];
-imageUrl ="./himapcut.jpg"
-imageBounds = [[ 25.01322659611521, 46.4798932072461],[24.984476969706886,46.52926520707613]];
+
+/*
 
 
-const imageOverlay = L.imageOverlay(imageUrl, imageBounds);
+
+const topLeft = [25.00084386674766, 46.49814964591205]; // Coordinates of the top-left corner
+const topRight = [24.998247816188762, 46.518431895543]; // Coordinates of the top-right corner
+const bottomLeft = [24.99492699889193, 46.49684178697793]; // Coordinates of the bottom-left corner
+// 24.99218934000478, 46.51740754735572
+ imageOverlay = L.imageOverlay.rotated('./newmap.jpg', topLeft, topRight, bottomLeft).addTo(mymap);
+*/
+
+
+
 
 stages_layer = L.layerGroup().addTo(mymap)
 green_layer = L.layerGroup().addTo(mymap)
@@ -692,24 +693,27 @@ mymap.getContainer().addEventListener("touchend", function (e) {
       
   //malen des Swipes und des Pfeilkopfes
     
-      draw_arrow (ort1,ort2,"grey",www,10)
+    //  draw_arrow (ort1,ort2,"grey",www,10)
      
       infotag.text("swipe reported. category:   "+ www/5)
+   
 
-  // timeer der eingegebene Swipes vernichtet
-  
-
-    ntemp = new Date()
-    ntemp = ntemp.getTime()
+      
 
     // !!!! hier sit das speichern des swipes deaktiviert !!!!!!!!!!!!
     if (locked) {
       infotag.text('can not send swipes when -LOCKED-')
       return;
+    }else{
+      
+ntemp = new Date()
+ntemp = ntemp.getTime()
+  newEntry ={meldender:set_name,von:ort1, nach:ort2,zeit:parseInt(ntemp),dicke:www}
+ 
+swipes_arr.push(newEntry); // Add new entry to the array
+database.ref('soundstorm/SS24aux/day' + heutag + '/swipes')
+databaseRef.set(swipes_arr)
     }
-     const database = firebase.database()
-     databaseRef = database.ref('soundstorm').child('swipes').child(ntemp);
-    databaseRef.set({meldender:set_name,von:ort1, nach:ort2,zeit:ntemp,dicke:www})
     }
   }})
 
@@ -938,7 +942,7 @@ function make_graphdata_stages(indata,capacity,tager){
   //indata.zeit[0] = temp.getTime()
   //indata.usage[0] = 0 
  
-  temp = temp.setHours(15,0,0,0)
+  temp = temp.setHours(10,0,0,0)
 
   // der fixe wert capacity der in der stages_list manuelll vegeben wurde * die auslastung ergibt die anzahlen
  // capacity =
