@@ -20,18 +20,39 @@
 
   </head>
   <style>
-  table, th, td{border:2px solid black;border-collapse: collapse;padding-left: 5px;padding-right: 5px;text-align: center;
     
-    font-size: 1.4vh}   
-    td { font-size: 1.2vh }
+  table, th, td{border:2px solid white;border-collapse: collapse;padding-left: 5px;padding-right: 5px;text-align: center;
+    
+    font-size: 4vh}   
+    td { font-size: 2.5vh }
       body {font-family: Arial}
+
+      #map {     height: 600px;
+        width: 100%;}
+      .leaflet-control-attribution {
+            color: #313131 !important;
+            background: rgba(0, 0, 0, 0.6);
+            font-size: 12px;
+            padding: 3px 5px;
+        }
+
+        .leaflet-control-attribution a {
+            color: #000000 !important;
+            text-decoration: none;
+        }
+
+        .leaflet-control-attribution a:hover {
+            color: #000000 !important;
+        }
   </style>
-  <body style="overflow: hidden;">
+  <body style="overflow: hidden;background-color: black;color:white">
 
   <div id="lio_div" style="float:left;width:50%;height:60%;">
     <div id="map_div" style="width:100%;height: 100%"></div></div>
   <div id="reo_div" style="float:left;width:40%;height:60%;text-align: center;">
-  <img src="https://sandroschmidt.github.io/SS24/logo.png" style="width: 60%" onclick="selected_area.id =99; make_cul_graph()">
+    <br><br>
+  <img src="./logosw.png" style="width: 75%" onclick="selected_area.id =99; make_cul_graph()">
+  <br>
   <!--  <img src=".//safe_events_logo-1.png" style="width: 30%" id ="evtlog" onclick="d3.select('#evtlog').remove()" >
   -->
   </div>
@@ -46,7 +67,6 @@
 
 
 
-  <span id="infotag"></span>
   <!--
   <input id ="imgstr1" type="number" style ="font-size: 24px" step=0.0001 onchange="imageBounds[0][0]=this.value;imageOverlay.setBounds(imageBounds);">
   <input id ="imgstr2" type="number" step=0.0001 onchange="imageBounds[0][1]=this.value;imageOverlay.setBounds(imageBounds);">
@@ -63,8 +83,6 @@
   d3.select('#imgstr3').attr("value",imageBounds[1][0])
   d3.select('#imgstr4').attr("value",imageBounds[1][1])
   */
-
-  infotag = d3.select('#infotag')
 
   initialise_map()
   initialise_settings()
@@ -298,9 +316,12 @@
   // reu =  d3.select('#reu_div').style('width',fenster.breite*(1-layout)+"px").style('height',fenster.hoehe*0.45+"px")
 
   reo.append('br')
-  tidi = reo.append('span').style('margin','auto').text('DAY 1 - Time 10:15').style("font-size", "3vh").style("font-weight",700)
+  tidi = reo.append('span').style('margin','auto').text('DAY 1 - Time 10:15').style("font-size", "5vh").style("font-weight",700)
   .on('click',function (){nowbutton()}).style('cursor', 'pointer')
 
+  reo.append('br')
+  reo.append('br')
+  reo.append('br')
   reo.append('br')
   tabero = reo.append('table').style('width',"100%").style('margin','auto').style('width','95%').style('margin-top',"5px")//.style("font-size", "5px")
   temp = tabero.append('tr').style('background-color',"grey")
@@ -333,10 +354,10 @@
   .style("cursor", "pointer").style("font-weight",700) 
         .on('click',  function(){ select_area(j)})  )
 
-  tuc.push(temp.append("td").text("u"+i).style("font-weight",700))
+  tuc.push(temp.append("td").text("u"+i).style("font-weight",700).style("color","black"))
 
-  tdc.push(temp.append("td").text("d"+i).style("font-weight",700))
-  ttc.push(temp.append("td").text("t"+i).style("font-weight",700))
+  tdc.push(temp.append("td").text("d"+i).style("font-weight",700).style("color","black"))
+  ttc.push(temp.append("td").text("t"+i).style("font-weight",700).style("color","black"))
   //tpc.push(temp.append("td").text("p"+i).style("font-weight",700))
   }
   //tpc[5].style('color',"white")
@@ -355,7 +376,7 @@
 
   
 
-  slider =  d3.select('#katze').append('input').attr('type','range').style('width',"96%").style('height',"3%").style('margin','auto').style('display', 'block')
+  /*slider =  d3.select('#katze').append('input').attr('type','range').style('width',"96%").style('height',"3%").style('margin','auto').style('display', 'block')
   .attr('max',44).attr('min',0).attr('step',1).on('change',
 
     function(){
@@ -368,35 +389,11 @@
 
 
         refresh();})
-
+*/
 
   but_div = d3.select('body').append('div')//.style("position", "absolute").style("bottom", "35px")
   but_div.append('br')
-    
-  but_div.append('button').text("Day 1").style("font-size", "0.65vw").on('click',  function(){a = new Date("2022-11-26T14:00");b = new Date ("2022-11-27T04:00");settim.setDate(26);refresh() })
-  but_div.append('button').text("Day 2").style("font-size", "0.65vw").on('click',  function(){a = new Date("2022-11-27T14:00");b = new Date ("2022-11-28T04:00");settim.setDate(27);refresh() })
-  but_div.append('button').text("Day 3").style("font-size", "0.65vw").on('click',  function(){a = new Date("2022-11-28T14:00");b = new Date ("2022-11-29T04:00");settim.setDate(28);refresh() })
-
-  but_div.append('button').text("show cap").style("font-size", "0.65vw").on('click',  function(){show_cap = !show_cap;refresh() })
-  but_div.append('button').text("show scans").style("font-size", "0.65vw").on('click',  function(){selected_area.id=90;refresh() })
-  but_div.append('button').text("show camcounts").style("font-size", "0.65vw").on('click',  function(){selected_area.id=91;refresh() }).on('dblclick',  function(){selected_area.id=92;refresh() })
-  but_div.append('button').text("show events").style("font-size", "0.65vw").on('click',  function(){show_event = !show_event;refresh() }).on('dblclick',  function(){selected_area.id=92;refresh() })
-  but_div.append('button').text("show progress").style("font-size", "0.65vw").on('click',  function(){show_progress = !show_progress;refresh() }).on('dblclick',  function(){show_progress = false;show_progress23 = !show_progress23;refresh() })
-  but_div.append("input").attr('type',"number").attr('value',ruckschau).attr('min',1).attr('max',5).on('change',function(){ruckschau = this.value; refresh()})
-  but_div.append('button').text("timer").style("font-size", "0.65vw").on('click',  function(){timer = !timer })
-  but_div.append('button').text("show tensdens").style("font-size", "0.65vw").on('click',  function(){show_tensdens = !show_tensdens;refresh() })
-
-
-  but_div.append('button').text("Fullscreen").style("font-size", "0.65vw").on('click',  function(){
-
-
-  lio =  d3.select('#lio_div').style('width',fenster.breite*0+"px").style('height',fenster.hoehe*0+"px")
-  reo =  d3.select('#reo_div').style('width',fenster.breite*0+"px").style('height',fenster.hoehe*0+"px").style('overflow',"hidden")
-  liu =  d3.select('#liu_div').style('width',fenster.breite*1+"px").style('height',fenster.hoehe*1+"px")
-  reu =  d3.select('#reu_div').style('width',fenster.breite*0+"px").style('height',fenster.hoehe*0+"px")
-  initialise_chart()
-
-  })
+  
 
   but_div.append('br')
 
@@ -732,51 +729,60 @@ settim = new Date()
   return Math.round(found)}
 
 
-  fensterei = 2
+  fensterei = true
+  
  setInterval(function(){
 
-  if (fensterei == 0){ // alles
-    d3.select("#liu_div").style("z-index", "1");
+  if (fensterei){ // alles
+   // d3.select("#reo_div").select('img').remove()
+ 
     d3.select("#lio_div").style("z-index", "1");
-    d3.select("#reo_div").style("z-index", "1");
-  d3.select('#lio_div').style('width',fenster.breite*0.5+"px").style('height',fenster.hoehe*0.51+"px")
-  d3.select('#liu_div').style('width',fenster.breite+"px").style('height',fenster.hoehe*0.5+"px")
-  d3.select('#reo_div').style('width',fenster.breite*0.5+"px").style('height',fenster.hoehe*0.5+"px")
+  
+  d3.select('#lio_div').style('width',"0px").style('height',"0px")
+
+  d3.select('#liu_div')//.style('width',fenster.breite+"px").style('height',fenster.hoehe*0.5+"px")
+  .style("position", "fixed")
+  .style("top", "0")
+  .style("left", "0")
+  .style("width", "50vw")
+  .style("height", "100vh")
+
+  d3.select('#reo_div')//.style('width',fenster.breite*0.5+"px").style('height',fenster.hoehe*0.5+"px")
+  .style("position", "fixed")
+  .style("top", "0")
+  .style("left", "50vw")
+  .style("width", "50vw")
+  .style("height", "100vh")
 }
-if (fensterei == 1){
-  d3.select("#liu_div").style("z-index", "1");
-  d3.select("#lio_div")
- // .style("position", "fixed")
- // .style("top", "0")
-  //.style("left", "0")
+else{ 
+
+  // map
+  d3.select('#lio_div').style('width',fenster.breite+"px").style('height',fenster.hoehe+"px")
+  d3.select('#liu_div').style('width',"0px").style('height',"0px")
+  d3.select('#reo_div').style('width',"0px").style('height',"0px")
+ 
+  /*d3.select("#lio_div")
+  .style("position", "fixed")
+  .style("top", "0")
+  .style("left", "0")
   .style("width", "100vw")
   .style("height", "100vh")
-  .style("background-color", "white") // Optional
+  */
+  //.style("background-color", "white") // Optional
   .style("z-index", "9999");
-
+  mymap.setView([24.99646971811259, 46.5075],17.3)
 }
 
-if (fensterei == 2){ //graph
-  d3.select("#lio_div").style("z-index", "1") .style("width", "0vw")  .style("height", "0vh");
-  d3.select("#reo_div").style("z-index", "1") .style("width", "0vw")  .style("height", "0vh");
-  d3.select("#liu_div")
- // .style("position", "fixed")
- // .style("top", "0")
- // .style("left", "0")
-  .style("width", "100vw")
-  .style("height", "100vh")
-  .style("background-color", "white") // Optional
-  .style("z-index", "9999");
-}
 
-fensterei ++
+
+fensterei = !fensterei
 mymap.invalidateSize();
 refresh()
 //Plotly.relayout('liu_div');
-if (fensterei == 4){fensterei =0 }
+//if (fensterei == 3){fensterei =0 }
 console.log(fensterei)
 
- },10000)
+ },5000)
 
   </script>
 </html>

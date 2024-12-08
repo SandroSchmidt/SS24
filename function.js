@@ -43,15 +43,17 @@ return graphdata
 }
 function draw_arrow(newswipe){
 
-ttl = 3-((jetzt2.getTime() -newswipe.zeit)/1000) 
+ttl = 60-((jetzt2.getTime() -newswipe.zeit)/1000) 
 
-ttl = Math.max(0,ttl)  
+//ttl = Math.max(0,ttl)  
 //ttl = 10
-farbe = "green"
+if (ttl>0)
+{farbe = "green"
 if (newswipe.dicke>5){farbe = "lime"}
 if (newswipe.dicke>10){farbe = "red"}
 if(newswipe.meldender == "sandro"){farbe="black"; newswipe.dicke=10}
 var polyline = L.polyline([newswipe.von,newswipe.nach],{weight:newswipe.dicke,color:farbe}).bindTooltip(newswipe.meldender).addTo(movement_layer);
+
 var arrowHead = L.polylineDecorator(polyline, {    patterns: [   
   { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ 
   pixelSize: newswipe.dicke, polygon: false, 
@@ -59,7 +61,7 @@ var arrowHead = L.polylineDecorator(polyline, {    patterns: [
 setTimeout(function(){
 polyline.remove()
 arrowHead.remove()
-},ttl*1000)
+},ttl*1000)}
 }
 function initialise_firebase(){
   
@@ -113,7 +115,7 @@ mirror: true,
 side:"left"
 },
 
-showlegend: true,legend: {  x: 0,  xanchor: 'left',  y: 1},
+showlegend: true,legend: {  x: 1,  xanchor: 'right',  y: 1},
 
 hovermode: "x",  //title: 'Basic Time Series', 
 // font: {size: 40},
@@ -122,7 +124,21 @@ shapes:[]
 }
 
 
-if (overridedisplay9){ gr_layout.yaxis.showticklabels= false }
+if (overridedisplay9){ 
+  gr_layout.yaxis.autorange=false,
+  gr_layout.yaxis.range = [0,100000],
+  gr_layout.yaxis.showticklabels= false,
+  gr_layout.yaxis.showticklabels= false,
+  gr_layout.plot_bgcolor= "black"//'#2d2d2d',  // Dark background for the plot area
+  gr_layout.paper_bgcolor= "black"//'#121212',  // Dark background for the entire page
+  gr_layout.showlegend = false,
+  gr_layout.font= {color: 'white' ,size:24 }, // White font color for text   
+  gr_layout.xaxis.tickfont= {            color: 'white' },  // White tick labels for x-axis       
+  gr_layout.yaxis.tickfont={            color: 'white' },// White tick labels for y-axis
+  gr_layout.margin= {l: 40,  r: 25,b: 60,t: 10,  pad: 4}  
+// gr_layout.title.font={            co
+
+ }
 
 
 
@@ -173,7 +189,6 @@ databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/swipes');
 databaseRef.on('value', (snapshot) => {
 if (snapshot.exists()) {
 swipes_arr = snapshot.val();
-
 // Add any logic here to handle updates in the array (e.g., re-render UI)
 
 jetzt2 = new Date()
@@ -183,9 +198,6 @@ console.log("No data available");
 }
 }); 
 // Save the initial array to Firebase
-
-
-
 
 
 
@@ -426,12 +438,15 @@ function initialise_map(){
 
 // Karte und Hintergründe
 mymap = L.map('map_div',{zoomSnap: 0.1, dragging: false,minZoom:14,maxZoom:19}).setView([24.99646971811259, 46.5075],16.3 )
+if (overridedisplay9){ mymap.zoomControl.remove();}
+
 // mymap.on('zoomend', function() {setviewzoom = mymap.getZoom()});
 // mymap.on('moveend', function() { mapaa = (mymap.getCenter(),mymap.getCenter());setviewmap=[mapaa.lat,mapaa.lng]});
 
+
 tl1= L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{      
 opacity: 0.5,      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-}).addTo(mymap);
+});
 
 var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
@@ -441,7 +456,7 @@ var Jawg_Matrix =  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 subdomains: 'abcd',
 maxZoom: 20
-});
+}).addTo(mymap);
 
 
 imageUrl ="./zeichnung.svg"
@@ -510,8 +525,6 @@ mymap.toggleFullscreen();
 }, 'Toggle Fullscreen');
 fullscreenButton.addTo(mymap);
 */
-mymap.addControl(new L.Control.Fullscreen());
-
 
 
 for (f=0;f<inert_arr.length;f++)  {
@@ -531,10 +544,15 @@ for (f=0;f<hinter.length;f++)       {let fu = f;L.polygon(hinter[f], {color: 'gr
 for (f=0;f<vib_arr.length;f++)      {let fu = f;L.polygon(vib_arr[f].coords,{fillColor: '#cc99ff',fillOpacity:1,color:"black",weight:1}).bindTooltip(vib_arr[f].name).addTo(green_layer)}
 
 // Layercontroll
-L.control.layers(
-{"OSM": tl1,"img": imageOverlay,"dark":Jawg_Matrix ,"sat":Esri_WorldImagery},
-{"stages":stages_layer,"blocks":green_layer,"spotter+marker":eigensymbole_layer,"crowdflow" :movement_layer,
-"parking lots":parkinglot_layer,"op-zones":zones_layer,"medical":aidstations_layer}).addTo(mymap);
+if(!overridedisplay9)
+  {mymap.addControl(new L.Control.Fullscreen());
+    L.control.layers(
+      {"dark":Jawg_Matrix ,"OSM": tl1,"img": imageOverlay,"sat":Esri_WorldImagery},
+      {"stages":stages_layer,"blocks":green_layer,"spotter+marker":eigensymbole_layer,"crowdflow" :movement_layer,
+      "parking lots":parkinglot_layer,"op-zones":zones_layer,"medical":aidstations_layer}).addTo(mymap);
+      
+  }
+  
 
 //ownmarker = L.marker(  [24.996,46.508]).addTo(mymap);
 
@@ -596,50 +614,40 @@ isZooming = false;
 
 // hier werden die swipes aufgenommen und gespeichert in der firebase  
 mymap.getContainer().addEventListener("touchend", function (e) {
-
-
-
-if(!isZooming ){
-touchEndX = e.changedTouches[0].clientX;
-touchEndY = e.changedTouches[0].clientY;
-ort1 = mymap.containerPointToLatLng([touchStartX,touchStartY]);
-ort2 = mymap.containerPointToLatLng([touchEndX,touchEndY]);
-
-minmove = 0.0002
-maxmove = 0.005
-move = Math.abs(ort1.lat - ort2.lat) + Math.abs(ort1.lng - ort2.lng)
-
-end_date = new Date()   
-diff = Math.ceil((end_date.getTime()-start_time.getTime())/500)
-www = 5*diff
-if(move> minmove && move <maxmove && diff < 4)
-{ 
-
-//malen des Swipes und des Pfeilkopfes
-
-//  draw_arrow (ort1,ort2,"grey",www,10)
-
-infotag.text("swipe reported. category:   "+ www/5)
-
-
-
-
-// !!!! hier sit das speichern des swipes deaktiviert !!!!!!!!!!!!
-if (locked) {
-infotag.text('can not send swipes when -LOCKED-')
-return;
-}else{
-
-ntemp = new Date()
-ntemp = ntemp.getTime()
-newEntry ={meldender:set_name,von:ort1, nach:ort2,zeit:parseInt(ntemp),dicke:www}
-
-swipes_arr.push(newEntry); // Add new entry to the array
-database.ref('soundstorm/SS24aux/day' + heutag + '/swipes')
-databaseRef.set(swipes_arr)
-}
-}
-}})
+  if(!isZooming ){
+    touchEndX = e.changedTouches[0].clientX;
+    touchEndY = e.changedTouches[0].clientY;
+    ort1 = mymap.containerPointToLatLng([touchStartX,touchStartY]);
+    ort2 = mymap.containerPointToLatLng([touchEndX,touchEndY]);
+    console.log("touchend")
+    minmove = 0.0002
+    maxmove = 0.005
+    move = Math.abs(ort1.lat - ort2.lat) + Math.abs(ort1.lng - ort2.lng)
+    end_date = new Date()   
+    diff = Math.ceil((end_date.getTime()-start_time.getTime())/500)
+    www = 5*diff
+ 
+    if(move> minmove && move <maxmove && diff < 4){ 
+      infotag.text("swipe reported. category:   "+ www/5)
+  
+      if (locked) {
+        infotag.text('can not send swipes when -LOCKED-')
+        console.log("swipe while locked")
+        return;
+        }
+        else{
+       
+          ntemp = new Date()
+          ntemp = ntemp.getTime()
+          newEntry ={meldender:set_name,von:ort1, nach:ort2,zeit:parseInt(ntemp),dicke:www}
+          swipes_arr.push(newEntry); // Add new entry to the array
+      
+          databaseRef =database.ref('soundstorm/SS24aux/day' + heutag + '/swipes')
+          databaseRef.set(swipes_arr)
+          }
+    }
+  }
+})
 
 // Bühnen einmalen
 stages_geo=[]
