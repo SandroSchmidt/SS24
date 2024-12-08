@@ -126,7 +126,7 @@ shapes:[]
 
 if (overridedisplay9){ 
   gr_layout.yaxis.autorange=false,
-  gr_layout.yaxis.range = [0,100000],
+  gr_layout.yaxis.range = [0,105000],
   gr_layout.yaxis.showticklabels= false,
   gr_layout.yaxis.showticklabels= false,
   gr_layout.plot_bgcolor= "black"//'#2d2d2d',  // Dark background for the plot area
@@ -979,7 +979,7 @@ const database = firebase.database();
   databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("zeit");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
-              currentArray.push(jetzt.getTime()+(1000*3600*9)); //!!!!!!!!!!!!!!!!!!!!!!!! das hier ist fingiert für demo
+              currentArray.push(jetzt.getTime()+(1000*3600*3)); //!!!!!!!!!!!!!!!!!!!!!!!! das hier ist fingiert für demo
               
         return currentArray;
              });
