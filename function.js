@@ -91,10 +91,12 @@ height = fenster.hoehe*0.3- margin.top - margin.bottom;
 gr_layout= {
 xaxis: {
 type: 'date',
-showline:true,
-tickformat: '%H:%M',  // Format for displaying date on x-axis
+showgrid: true,
+showline:true,          
+         
+  // Format for displaying date on x-axis
 //range: [a, b],
-range: ['2024-12-08 17:00:00', '2024-12-09 04:00:00'],
+range: ['2024-12-08 16:59:00', '2024-12-09 04:00:00'],
 linecolor: 'black',
 linewidth: 2,
 mirror: true
@@ -104,7 +106,7 @@ yaxis: {
 autorange: true,
 type: 'linear',
 rangemode: 'tozero',  
-showgrid: true,
+
 zeroline: false,
 showline: true,
 overlaying: 'y2',
@@ -123,6 +125,7 @@ margin: {l: 40,  r: 25,b: 30,t: 10,  pad: 4},
 shapes:[]
 }
 
+gr_layout.xaxis.dtick=3600000
 
 if (overridedisplay9){ 
   gr_layout.yaxis.autorange=false,
@@ -132,10 +135,18 @@ if (overridedisplay9){
   gr_layout.plot_bgcolor= "black"//'#2d2d2d',  // Dark background for the plot area
   gr_layout.paper_bgcolor= "black"//'#121212',  // Dark background for the entire page
   gr_layout.showlegend = false,
-  gr_layout.font= {color: 'white' ,size:24 }, // White font color for text   
+  gr_layout.font= {color: '#3a3a3b' ,size:22 }, // White font color for text   
   gr_layout.xaxis.tickfont= {            color: 'white' },  // White tick labels for x-axis       
+  gr_layout.yaxis.showline = true,
   gr_layout.yaxis.tickfont={            color: 'white' },// White tick labels for y-axis
-  gr_layout.margin= {l: 40,  r: 25,b: 60,t: 10,  pad: 4}  
+  gr_layout.margin= {l: 40,  r: 0,b: 60,t: 10,  pad: 4}  ,
+  gr_layout.xaxis.gridcolor="#3a3a3b",      
+  gr_layout.xaxis.tickformat="%H:%M"      
+
+
+
+
+
 // gr_layout.title.font={            co
 
  }

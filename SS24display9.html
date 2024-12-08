@@ -23,8 +23,8 @@
     
   table, th, td{border:2px solid white;border-collapse: collapse;padding-left: 5px;padding-right: 5px;text-align: center;
     
-    font-size: 4vh}   
-    td { font-size: 2.5vh }
+    font-size: 3vh}   
+    td { font-size: 2vh }
       body {font-family: Arial}
 
       #map {     height: 600px;
@@ -51,7 +51,7 @@
     <div id="map_div" style="width:100%;height: 100%"></div></div>
   <div id="reo_div" style="float:left;width:40%;height:60%;text-align: center;">
     <br><br>
-  <img src="./logosw.png" style="width: 75%" onclick="selected_area.id =99; make_cul_graph()">
+  <img src="./logosw.png" style="width: 60%" onclick="selected_area.id =99; make_cul_graph()">
   <br>
   <!--  <img src=".//safe_events_logo-1.png" style="width: 30%" id ="evtlog" onclick="d3.select('#evtlog').remove()" >
   -->
@@ -744,14 +744,14 @@ settim = new Date()
   .style("position", "fixed")
   .style("top", "0")
   .style("left", "0")
-  .style("width", "50vw")
+  .style("width", "60vw")
   .style("height", "100vh")
 
   d3.select('#reo_div')//.style('width',fenster.breite*0.5+"px").style('height',fenster.hoehe*0.5+"px")
   .style("position", "fixed")
   .style("top", "0")
-  .style("left", "50vw")
-  .style("width", "50vw")
+  .style("left", "60vw")
+  .style("width", "40vw")
   .style("height", "100vh")
 }
 else{ 
@@ -770,7 +770,7 @@ else{
   */
   //.style("background-color", "white") // Optional
   .style("z-index", "9999");
-  mymap.setView([24.99646971811259, 46.5075],17.3)
+  mymap.setView([24.99646971811259, 46.5075],18)
 }
 
 
