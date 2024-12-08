@@ -132,8 +132,8 @@
  
 
   <hr>
+  
   <p id="infotag">Version 1.1 - loaded</p>
-
 </div>
  
 </body>
@@ -143,7 +143,7 @@
  dens_slider = d3.select('#hierdensityslider')
  tens_slider = d3.select('#hiertensionslider')
  usage_slider = d3.select('#hierusageslider')
-
+fakereportdate = new Date()
   /*
 // diese ZEile erzwingt das refreshen der page, ohne cache
 // Example JavaScript code to append a random query parameter to the current URL
@@ -325,87 +325,6 @@ function update_ownpos(){
  */
 
 
-function writeReportToFirebase() {
-  d3.select('#lock').style('background-color',"yellow")
-  
-  if (locked) {
-    infotag.text('can not send reports or swipes when -LOCKED-')
-    return;
-  }
-const database = firebase.database();
-
-  databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("zeit");
-              databaseRef.transaction(function(currentArray) {
-              currentArray = currentArray || [];
-              currentArray.push(jetzt.getTime()+(1000*3600*3)); //!!!!!!!!!!!!!!!!!!!!!!!! das hier ist fingiert für demo
-              
-        return currentArray;
-             });
-      
-  databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("usage");
-              databaseRef.transaction(function(currentArray) {
-              currentArray = currentArray || [];
-             currentArray.push(parseInt(set_usage));
-             setTimeout(function (){d3.select('#lock').style('background-color',"green")},500)
-              return currentArray;
-             });
-
-             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("tension");
-              databaseRef.transaction(function(currentArray) {
-              currentArray = currentArray || [];
-             currentArray.push(parseInt(set_tens));
-              return currentArray;
-             });
-             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("density");
-              databaseRef.transaction(function(currentArray) {
-              currentArray = currentArray || [];
-             currentArray.push(parseInt(set_dens));
-              return currentArray;
-             });
-             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("meldender");
-              databaseRef.transaction(function(currentArray) {
-              currentArray = currentArray || [];
-             currentArray.push(set_name);
-              return currentArray;
-             });
-             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("position");
-              databaseRef.transaction(function(currentArray) {
-              currentArray = currentArray || [];
-             currentArray.push(set_pos);
-              return currentArray;
-             });
-
-
-
-
-infotag.text("report sent ")
-
- 
-
-  
-
-/*
-
-     // Push the data to the database
-      databaseRef.push(dataToWrite)
-        .then(() => {
-          console.log("Data was successfully written to the Firebase database.");
-        })
-        .catch((error) => {
-          console.error("Error writing data to the Firebase database:", error);
-          infotag.text("no connection!!")
-        });
-
-        d3.select('#infotag').text('status: report sent at '+ jetzt.getHours()+":"+jetzt.getMinutes()+":"+jetzt.getSeconds())
-*/
-        // hier wird versucht zusätzlich einen report über die aktuelle alge zusammenzustellen
-
-       
-        databaseRef = database.ref('soundstorm').child('aktuell').child(stages_list[set_area].name);
-        databaseRef.set({zeit:jetzt.getTime(), density: set_dens, tension: set_tens,  usage: set_usage})
-
-      
-    }
 
     function select_area(set_area){
       selected_area.id = set_area

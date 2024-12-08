@@ -52,9 +52,16 @@
   </tr>
   </table>
     <button onclick="spotter_report()">Spotter Report</button>
+    
+    <hr>
+    <input type="button" value="send full-empty report" onclick="sendfakereport()">
+    <input type="datetime-local" oninput="fakereportdate=new Date(this.value); console.log('fakedate: ' +fakereportdate)">
+  
+  <hr>
   </div>
  <div id="plot_div" ></div>
  <div id="report_div"></div>
+ 
 </body>
 
 <script>
@@ -119,7 +126,35 @@ function write_camcounts(){
              });
 }
 
-
+function sendfakereport(){
+    jetzt = fakereportdate
+    current ={
+  "Big Beast Circle":{density:7,usage:55,tension:7},
+  "Big Beast North":{density:7,usage:55,tension:7},
+  "Big Beast South":{density:7,usage:55,tension:7},
+  "Dance Tent":{density:7,usage:55,tension:7},
+  "Down Beast":{density:7,usage:55,tension:7},
+  "MDL Town":{density:7,usage:55,tension:7},
+  "Underground 1":{density:7,usage:55,tension:7},
+  "VIB-Terrace":{density:7,usage:55,tension:7},
+  "VIB-Gate":{density:7,usage:55,tension:7},
+  "Green Space 4":{density:7,usage:0,tension:7},
+  "West-Gate":{density:7,usage:0,tension:7},
+  "East-Gate":{density:7,usage:0,tension:7},
+  "Underground 2":{density:7,usage:0,tension:7},
+  "Underground 3":{density:7,usage:0,tension:7},
+  "Underground 4":{density:7,usage:0,tension:7},
+  "parking lot 1":{usage:0},
+  "parking lot 2":{usage:0},
+  "parking lot 3":{usage:0},
+  "parking lot 4":{usage:0},
+  "parking lot 5":{usage:0},
+  "parking lot 6":{usage:0},
+  "parking lot 7":{usage:0}
+  
+  }
+  writeReportToFirebase()
+  }
    
 function write_scans(){
   jetzt = new Date()

@@ -92,7 +92,7 @@ type: 'date',
 showline:true,
 tickformat: '%H:%M',  // Format for displaying date on x-axis
 //range: [a, b],
-range: ['2024-12-07 17:00:00', '2024-12-08 04:00:00'],
+range: ['2024-12-08 17:00:00', '2024-12-09 04:00:00'],
 linecolor: 'black',
 linewidth: 2,
 mirror: true
@@ -120,6 +120,9 @@ hovermode: "x",  //title: 'Basic Time Series',
 margin: {l: 40,  r: 25,b: 30,t: 10,  pad: 4},  
 shapes:[]
 }
+
+
+if (overridedisplay9){ gr_layout.yaxis.showticklabels= false }
 
 
 
@@ -652,7 +655,11 @@ select_area(zi)
 
 }).addTo(stages_layer,{ bubblingMouseEvents: false })
 stages_list[i].geo = f
-}}}
+}}
+
+
+
+}
 function interpolateUndefined(arr) {
 const nonEmptyIndices = arr.reduce((indices, value, index) => {
 if (value !== null && value !== undefined) {
@@ -952,6 +959,92 @@ if (usage[i] !== undefined && usage[i] !== null && usage[i] !== '') {
 // If all entries are empty, return an empty object or handle accordingly
 return { zeit: [], usage: [] };
 }
+function writeReportToFirebase() {
+  d3.select('#lock').style('background-color',"yellow")
+  
+  if (locked) {
+    infotag.text('can not send reports or swipes when -LOCKED-')
+    return;
+  }
+const database = firebase.database();
+
+  databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("zeit");
+              databaseRef.transaction(function(currentArray) {
+              currentArray = currentArray || [];
+              currentArray.push(jetzt.getTime()+(1000*3600*3)); //!!!!!!!!!!!!!!!!!!!!!!!! das hier ist fingiert für demo
+              
+        return currentArray;
+             });
+      
+  databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("usage");
+              databaseRef.transaction(function(currentArray) {
+              currentArray = currentArray || [];
+             currentArray.push(parseInt(set_usage));
+             setTimeout(function (){d3.select('#lock').style('background-color',"green")},500)
+              return currentArray;
+             });
+
+             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("tension");
+              databaseRef.transaction(function(currentArray) {
+              currentArray = currentArray || [];
+             currentArray.push(parseInt(set_tens));
+              return currentArray;
+             });
+             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("density");
+              databaseRef.transaction(function(currentArray) {
+              currentArray = currentArray || [];
+             currentArray.push(parseInt(set_dens));
+              return currentArray;
+             });
+             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("meldender");
+              databaseRef.transaction(function(currentArray) {
+              currentArray = currentArray || [];
+             currentArray.push(set_name);
+              return currentArray;
+             });
+             databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("position");
+              databaseRef.transaction(function(currentArray) {
+              currentArray = currentArray || [];
+             currentArray.push(set_pos);
+              return currentArray;
+             });
+
+
+
+
+infotag.text("report sent ")
+
+ 
+
+  
+
+/*
+
+     // Push the data to the database
+      databaseRef.push(dataToWrite)
+        .then(() => {
+          console.log("Data was successfully written to the Firebase database.");
+        })
+        .catch((error) => {
+          console.error("Error writing data to the Firebase database:", error);
+          infotag.text("no connection!!")
+        });
+
+        d3.select('#infotag').text('status: report sent at '+ jetzt.getHours()+":"+jetzt.getMinutes()+":"+jetzt.getSeconds())
+*/
+        // hier wird versucht zusätzlich einen report über die aktuelle alge zusammenzustellen
+
+       
+        databaseRef = database.ref('soundstorm').child('aktuell').child(stages_list[set_area].name);
+        databaseRef.set({zeit:jetzt.getTime(), density: set_dens, tension: set_tens,  usage: set_usage})
+
+      
+    }
+
+
+    setTimeout(function() {
+      mymap.invalidateSize();
+  }, 500);
 /*
 ww =[]
 for (f=0;f< zones_arr.length;f++){
