@@ -255,7 +255,7 @@ function update_ownpos(){
    const database = firebase.database()
      databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations/spotter').child(set_name);
     databaseRef.set({zeit:a,ort:set_pos,name:set_name})
-           
+           eigensymbole_arr.spotter[set_name] = {zeit:a,ort:set_pos,name:set_name}
         }
 
         function showError(error) {
