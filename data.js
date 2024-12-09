@@ -2,6 +2,7 @@ overridedisplay9 = false
 parking_list ={geo:[],tooltip:[],usage:[]}
 fenster = {hoehe:window.innerHeight-30,breite:window.innerWidth-35};
 existing_markers=[]
+
 isZooming = false
 currentTimestamp = new Date()
 set_area=0
@@ -40,15 +41,70 @@ a = new Date("2022-11-26T14:00");b = new Date ("2022-11-27T04:00")
 // icons
 medicon = L.icon({  iconUrl: './icons/medicon.png', iconSize:     [20, 20], });
 mediconring = L.icon({  iconUrl: './icons/mediconring.png', iconSize:     [20, 20], });
-eventicon = L.icon({  iconUrl: './icons/green.png',  iconSize:     [40, 40],  iconAnchor:   [20, 40]})
+greenicon = L.icon({  iconUrl: './icons/green.png',  iconSize:     [40, 40],  iconAnchor:   [20, 40]})
+redicon = L.icon({  iconUrl: './icons/red.png',  iconSize:     [40, 40],  iconAnchor:   [20, 40]})
+resticon = L.icon({  iconUrl: './icons/restroom.png',  iconSize:     [20, 20],  iconAnchor:   [10, 10]})
 
 // http://vpn01.unifiedcommand.com:5601/app/dashboards#/view/35dd4b60-70ff-11ed-91e1-4b96f18a57f5?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))
 medstations =[
-{name:"medical station 1",capacity: 44,coords:[24.997519341074398,    46.50791423158756  ],geo:[]}, 
-{name:"medical station 2",capacity: 12,coords:[24.997827810738507,    46.51037677965662  ],geo:[]},
-{name:"medical station 3",capacity: 12,coords:[24.994616059238346,    46.51390042567419  ],geo:[]},
-{name:"medical station 4",capacity: 44,coords:[24.99399910301227,    46.511077504716916  ],geo:[]},
-{name:"medical station 5",capacity: 10,coords:[24.997283451985258,    46.50401019196586],geo:[]}],
+{name:"medical station 1",capacity: 44,coords:[
+  24.997149620258615,
+  46.508809156791145
+],geo:[]}, 
+{name:"medical station 2",capacity: 12,coords:[
+  24.99460608338205,
+  46.513946269712356
+],geo:[]},
+{name:"medical station 3",capacity: 12,coords:[
+  24.99511569761156,
+  46.50803346599291
+],geo:[]},
+{name:"medical station 4",capacity: 44,coords:[
+  24.994866816507624,
+  46.502573817458995
+],geo:[]},
+{name:"medical station 5",capacity: 10,coords:[
+  24.99722087049799,
+  46.50401171372094
+],geo:[]}],
+restrooms=
+[
+  [
+    24.997336847768477,
+    46.50292620062829
+  ],
+  [
+    24.997333289029456,
+    46.50819756854814
+  ],
+  [
+    24.99759032642436,
+    46.5100338738017
+  ],
+  [
+    24.995538912599798,
+    46.51397752969675
+  ],
+  [
+    24.9937906958604,
+    46.51143966272814
+  ],
+  [
+    24.995154335469813,
+    46.50707960128785
+  ],
+  [
+    24.995592142136545,
+    46.50485336780549
+  ],
+  [
+    24.99586455438651,
+    46.50162398815155
+  ]
+]
+
+
+
 
 stages_list=[   
 {name:"Big Beast Circle"  ,capacity: 50598,short: "bc",coords:[

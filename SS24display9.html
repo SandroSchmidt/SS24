@@ -51,7 +51,7 @@
     <div id="map_div" style="width:100%;height: 100%"></div></div>
   <div id="reo_div" style="float:left;width:40%;height:60%;text-align: center;">
     <br><br>
-  <img src="./logosw.png" style="width: 60%" onclick="selected_area.id =99; make_cul_graph()">
+  <img id="srlogo" src="./logosw.png" style="width: 60%" >
   <br>
   <!--  <img src=".//safe_events_logo-1.png" style="width: 30%" id ="evtlog" onclick="d3.select('#evtlog').remove()" >
   -->
@@ -76,6 +76,8 @@
 
   </body>
   <script>
+    setview9 = {grid:[24.99646971811259, 46.5075],zoom:17.5}
+    logotoggle = true
     overridedisplay9 = true
    /*  Diese 4 Zeilen sind für den Fall, dass man das Bild im Hintergrund nochmal zerren muss, dazu sind die number.inputs aus einzukommentieren
   d3.select('#imgstr1').attr("value",imageBounds[0][0])
@@ -317,7 +319,8 @@
 
   reo.append('br')
   tidi = reo.append('span').style('margin','auto').text('DAY 1 - Time 10:15').style("font-size", "5vh").style("font-weight",700)
-  .on('click',function (){nowbutton()}).style('cursor', 'pointer')
+
+  .on('click',function (){logotoggle = !logotoggle; writedisp9ToFirebase()}).style('cursor', 'pointer')
 
   reo.append('br')
   reo.append('br')
@@ -770,19 +773,33 @@ else{
   */
   //.style("background-color", "white") // Optional
   .style("z-index", "9999");
-  mymap.setView([24.99646971811259, 46.5075],18)
+  mymap.setView(setview9.grid,setview9.zoom)
 }
 
-
+mymap.on('zoomend', function() {setview9.zoom = mymap.getZoom();writedisp9ToFirebase() });
+mymap.on('moveend', function() { mapaa = (mymap.getCenter(),mymap.getCenter());setview9.grid=[mapaa.lat,mapaa.lng];writedisp9ToFirebase() });
 
 fensterei = !fensterei
 mymap.invalidateSize();
 refresh()
+if(logotoggle){d3.select('#srlogo').style("width","60%")}else{d3.select('#srlogo').style("width","0%")}
 //Plotly.relayout('liu_div');
 //if (fensterei == 3){fensterei =0 }
 console.log(fensterei)
 
  },5000)
+
+
+ 
+ function writedisp9ToFirebase() {
+ const database = firebase.database();
+  databaseRef = database.ref('soundstorm/SS24/Disp9')
+  databaseRef.set({setview9,logotoggle:logotoggle})
+          
+    }
+
+
+
 
   </script>
 </html>

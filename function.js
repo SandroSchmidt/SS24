@@ -200,14 +200,29 @@ databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/swipes');
 databaseRef.on('value', (snapshot) => {
 if (snapshot.exists()) {
 swipes_arr = snapshot.val();
-// Add any logic here to handle updates in the array (e.g., re-render UI)
-
 jetzt2 = new Date()
 swipes_arr.forEach(draw_arrow)
 } else {
 console.log("No data available");
 }
 }); 
+
+
+databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations');
+// Listen for changes in the database
+databaseRef.on('value', (snapshot) => {
+if (snapshot.exists()) {
+eigensymbole_arr= snapshot.val();
+console.log(eigensymbole_arr)
+draw_marker()
+} else {
+console.log("No data available");eigensymbole_arr= {marker:[],spotter:[]}
+}
+}); 
+
+
+
+
 // Save the initial array to Firebase
 
 
@@ -448,7 +463,7 @@ draw_arrow (swipes_arr[key].von,swipes_arr[key].nach,"green",swipes_arr[key].dic
 function initialise_map(){
 
 // Karte und Hintergründe
-mymap = L.map('map_div',{zoomSnap: 0.1, dragging: false,minZoom:14,maxZoom:19}).setView([24.99646971811259, 46.5075],16.3 )
+mymap = L.map('map_div',{zoomSnap: 0.1, dragging: false,minZoom:14,maxZoom:20}).setView([24.99646971811259, 46.5075],16.3 )
 if (overridedisplay9){ mymap.zoomControl.remove();}
 
 // mymap.on('zoomend', function() {setviewzoom = mymap.getZoom()});
@@ -500,7 +515,7 @@ movement_layer = L.layerGroup().addTo(mymap)
 parkinglot_layer = L.layerGroup().addTo(mymap)
 zones_layer = L.layerGroup()
 back_layer = L.layerGroup().addTo(mymap)
-aidstations_layer = L.layerGroup()
+aidstations_layer = L.layerGroup().addTo(mymap)
 // alles einmalen das keine Bühnen sind
 for (f=0;f<parking_arr.length;f++)  {
 
@@ -520,6 +535,8 @@ databaseRef = database.ref('soundstorm').child('aktuell').child(parking_arr[fx].
     })
 
     */
+
+
 polygon.addTo(l)
 
 var tooltip = L.tooltip({permanent: true, direction: 'center'})
@@ -529,6 +546,7 @@ var tooltip = L.tooltip({permanent: true, direction: 'center'})
 parking_list.tooltip.push(tooltip)
 
 }
+
 
 /*
 var fullscreenButton = L.easyButton('fa-arrows-alt', function(btn, mymap){
@@ -549,6 +567,7 @@ for (f=0;f<medstations.length;f++) {medstations[f].geo = L.marker(medstations[f]
 //medstations[f].geo .on("mouserover",function(e){this.openPopup()})
 medstations[f].geo.addTo(aidstations_layer)}
 for (f=0;f<greening_arr.length;f++) {let fu = f;L.polygon(greening_arr[f].coords, {color: 'green', "weight": 1,"opacity": 0.65 }).bindTooltip(greening_arr[f].name).addTo(green_layer)}
+for (f=0;f<restrooms.length;f++) {L.marker(restrooms[f],{icon:resticon}).addTo(green_layer)}
 for (f=0;f<blocking_arr.length;f++) {let fu = f; L.polygon(blocking_arr[f].coords, {fillColor: 'grey',color:"black", "weight": 1,"opacity": 0.8}).bindTooltip(blocking_arr[f].name).addTo(green_layer)}
 
 for (f=0;f<hinter.length;f++)       {let fu = f;L.polygon(hinter[f], {color: 'grey' ,"weight": 2,"fillOpacity": 0.65}).on('mouseover',function(){infotag.text("you hover on back_block "+fu)}).addTo(back_layer)}
@@ -572,19 +591,24 @@ let touchStartX, touchEndX;
 
 mymap.on('click',function(e){
 if(eventmarkertoggle == true){
-
+jetzt = new Date()
   let eventloc = 
 //   L.marker([e.latlng.lat,e.latlng.lng],{icon:eventicon}).addTo(mymap)
     userInput = prompt('describe marker:', '')
     if (userInput !== null) {
-    databaseRef = database.ref('soundstorm').child('locations').child("marker"+markercounter);
-  
-    jetzt = new Date ()
-          databaseRef.set({ort: [e.latlng.lat,e.latlng.lng],
-            text:userInput,
-            meldender:set_name,zeige : true,
-            zeit:jetzt.getTime()})
+      randomNum = Math.floor(Math.random() * 9999) + 1;
+    databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations');
+      eigensymbole_arr.marker.push({
+      ort: [e.latlng.lat, e.latlng.lng],
+      text: userInput,
+      meldender: set_name,
+      zeige: true,
+      zeit:jetzt.getTime()
+  });
 
+  // Save the updated data back to Firebase, using the array index as the key
+  databaseRef.set(eigensymbole_arr);
+    
 
     
 
@@ -1064,7 +1088,26 @@ infotag.text("report sent ")
     setTimeout(function() {
       mymap.invalidateSize();
   }, 500);
-/*
+
+
+function draw_marker(){
+  console.log(eigensymbole_arr.marker)
+for(ip=0;ip<eigensymbole_arr.marker.length;ip++)
+ { let u =ip
+  if(eigensymbole_arr.marker[ip].zeige == true){
+  { 
+  let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:greenicon}).bindTooltip(eigensymbole_arr.marker[ip].text).addTo(eigensymbole_layer)//,
+  tempmarker.on('click', function() {
+    
+   // console.log(u + " - " +ip)
+    tempmarker.remove()
+  eigensymbole_arr.marker[u].zeige = false
+  //databaseRef = database.ref('soundstorm/ss24aux/locations/marker');
+  //databaseRef.set(eigensymbole_arr.marker)})
+ // }}
+ })
+ }}}}
+  /*
 ww =[]
 for (f=0;f< zones_arr.length;f++){
 
