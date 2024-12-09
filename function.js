@@ -213,6 +213,10 @@ databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations');
 databaseRef.on('value', (snapshot) => {
 if (snapshot.exists()) {
 eigensymbole_arr= snapshot.val();
+
+if(eigensymbole_arr.marker == undefined){eigensymbole_arr.marker = []}
+if(eigensymbole_arr.spotter == undefined){eigensymbole_arr.spotter = []}
+
 console.log(eigensymbole_arr)
 draw_marker()
 } else {
@@ -590,7 +594,10 @@ if(!overridedisplay9)
 let touchStartX, touchEndX;
 
 mymap.on('click',function(e){
+
 if(eventmarkertoggle == true){
+  tcolor = "green"
+  if(incident_toggle ==true){tcolor="red"; inciden_toggle = false}
 jetzt = new Date()
   let eventloc = 
 //   L.marker([e.latlng.lat,e.latlng.lng],{icon:eventicon}).addTo(mymap)
@@ -603,6 +610,7 @@ jetzt = new Date()
       text: userInput,
       meldender: set_name,
       zeige: true,
+      farbe:tcolor,
       zeit:jetzt.getTime()
   });
 
@@ -1091,27 +1099,31 @@ infotag.text("report sent ")
 
 
 function draw_marker(){
-  console.log(eigensymbole_arr.marker)
-for(ip=0;ip<eigensymbole_arr.marker.length;ip++)
- { let u =ip
-  if(eigensymbole_arr.marker[ip].zeige == true){
-  
-  let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:greenicon}).bindTooltip(eigensymbole_arr.marker[ip].text).addTo(eigensymbole_layer)//,
-  tempmarker.on('click', function() {
-    
-   // console.log(u + " - " +ip)
-    tempmarker.remove()
-  eigensymbole_arr.marker[u].zeige = false
-  //databaseRef = database.ref('soundstorm/ss24aux/locations/marker');
-  //databaseRef.set(eigensymbole_arr.marker)})
- // }}
- })
- }}
+  eigensymbole_layer.clearLayers()
+
+for(let ip=0;ip<eigensymbole_arr.marker.length;ip++)
+ { 
+          if(eigensymbole_arr.marker[ip].zeige == true){
+          
+                    if(eigensymbole_arr.marker[ip].farbe =="red"){tempico=redicon}else{tempico = greenicon}
+                    let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:tempico}).bindTooltip(eigensymbole_arr.marker[ip].text).addTo(eigensymbole_layer)//,
+                    tempmarker.on('click', function() {
+              
+                   
+                      tempmarker.remove()
+             
+                    eigensymbole_arr.marker[ip].zeige = false
+                    console.log(eigensymbole_arr)
+                    databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations/marker');
+                    databaseRef.set(eigensymbole_arr.marker)
+                  })
+                
+                  
+        }
+}
 
 
  Object.keys(eigensymbole_arr.spotter).forEach(key => {
-  console.log(key)
-  console.log(eigensymbole_arr.spotter[key].ort)
 
   let tempmarker = L.marker(eigensymbole_arr.spotter[key].ort).bindTooltip(eigensymbole_arr.spotter[key].name).addTo(eigensymbole_layer)//,
   tempmarker.on('click', function() {

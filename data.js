@@ -1,3 +1,4 @@
+incident_toggle =true
 overridedisplay9 = false
 parking_list ={geo:[],tooltip:[],usage:[]}
 fenster = {hoehe:window.innerHeight-30,breite:window.innerWidth-35};
@@ -32,6 +33,16 @@ swipes_arr =[]
 eventmarkertoggle = false
 locked = true
 imageBounds = [[ 25.00124, 46.49093],[24.99111, 46.5245]];
+
+/*
+[[
+  [24.99111,46.49093],[25.00124,46.49093],[25.00124,46.5245],[24.99111,46.5245],[8.5865294933,45.8179931641]
+]
+]
+46.5021104472,24.9920738146,46.5154678481,24.9997362886
+46.49093,24.99111,46.5245,25.00124
+*/
+
 locked=false // erlaubt grundsätzlich das uploaden auf fb ohne credentials
 set_name = "sandro"
 settim = new Date()
