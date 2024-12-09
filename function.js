@@ -56,6 +56,7 @@ function draw_arrow(){
                         if(swipes_arr[lil].meldender == "sandro"){farbe="black"; swipes_arr[lil].dicke=10}
 
                         var polyline = L.polyline([swipes_arr[lil].von,swipes_arr[lil].nach],{weight:swipes_arr[lil].dicke,color:farbe}).bindTooltip(swipes_arr[lil].meldender).addTo(movement_layer);
+                      //  polyline.openTooltip()
                         var arrowHead = L.polylineDecorator(polyline, {    patterns: [   
                           { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ 
                           pixelSize: swipes_arr[lil].dicke, polygon: false, 
@@ -109,7 +110,7 @@ showline:true,
          
   // Format for displaying date on x-axis
 //range: [a, b],
-range: ['2024-12-08 16:59:00', '2024-12-09 04:00:00'],
+range: ['2024-12-09 16:59:00', '2024-12-10 04:00:00'],
 linecolor: 'black',
 linewidth: 2,
 mirror: true
@@ -1024,6 +1025,8 @@ if (usage[i] !== undefined && usage[i] !== null && usage[i] !== '') {
 return { zeit: [], usage: [] };
 }
 function writeReportToFirebase() {
+  jetzt = new Date()
+  console.log(jetzt)
   d3.select('#lock').style('background-color',"yellow")
   
   if (locked) {
@@ -1035,7 +1038,7 @@ const database = firebase.database();
   databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("zeit");
               databaseRef.transaction(function(currentArray) {
               currentArray = currentArray || [];
-              currentArray.push(jetzt.getTime()+(1000*3600*3)); //!!!!!!!!!!!!!!!!!!!!!!!! das hier ist fingiert für demo
+              currentArray.push(jetzt.getTime()); //!!!!!!!!!!!!!!!!!!!!!!!! das hier ist fingiert für demo
               
         return currentArray;
              });
@@ -1125,6 +1128,7 @@ for(let ip=0;ip<eigensymbole_arr.marker.length;ip++)
 
                     if(eigensymbole_arr.marker[ip].farbe =="red"){tempico=redicon}else{tempico = greenicon}
                     let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:tempico}).bindTooltip(eigensymbole_arr.marker[ip].text).addTo(eigensymbole_layer)//,
+                    tempmarker.openTooltip()
                     tempmarker.on('click', function() {
               
                    

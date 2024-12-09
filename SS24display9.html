@@ -98,6 +98,17 @@
   })
 
 
+  
+
+
+  ref.on('value', (snapshot) => {
+  count_data = snapshot.val()
+  count_datain = make_graphdata({usage:count_data.IN,zeit:count_data.zeit})
+  count_dataout = make_graphdata({usage:count_data.OUT,zeit:count_data.zeit})
+  })
+
+
+
   read_current()
   daydata = read_a_day(24,heutag)
 
@@ -109,6 +120,14 @@
   for(i=0;i<stages_list.length;i++){
   if(current[stages_list[i].name] != undefined){
   */
+
+
+  databaseRef = database.ref('/soundstorm/SS24/Disp10');
+  databaseRef.on('value', (snapshot) => {
+  teror = snapshot.val()
+  //mymap.setView(teror)
+
+  })
   function jetzt_plot_malen(welcher_plot){
 
 
@@ -799,14 +818,14 @@ document.addEventListener('keydown', function(event) {
     // Check if the hotkey combination is pressed (e.g., Ctrl + Shift + A)
     if (event.key === 'a') {
       writedisp9ToFirebase();
-      console.log("adsasd")
+      
     }
 });
 
 
  function writedisp9ToFirebase() {
- const database = firebase.database();
-  databaseRef = database.ref('soundstorm/SS24').child('Disp9')
+  console.log("adsasd")
+  databaseRef = database.ref('soundstorm/SS24').child('Disp10')
   databaseRef.set({setview9,logotoggle:logotoggle})
           
     }
