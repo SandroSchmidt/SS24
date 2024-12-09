@@ -887,7 +887,7 @@ function generateTimeArray(startTime) {
 
 const timeArray = [new Date(startTime)]; // Start with the provided time
 
-for (let i = 1; i < 53; i++) {
+for (let i = 1; i < 45; i++) {// xxxx
 const nextTime = new Date(timeArray[i - 1]);
 nextTime.setMinutes(nextTime.getMinutes() + 15);
 timeArray.push(nextTime);
