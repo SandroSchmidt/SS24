@@ -41,27 +41,39 @@ refresh()
 return graphdata
 })
 }
-function draw_arrow(newswipe){
+function draw_arrow(){
+  drawjetzt = new Date().getTime()
+    for (let lil=0;lil < swipes_arr.length;lil++){
+              if(swipes_arr[lil].endzeit > drawjetzt)
+                              {
 
-ttl = 60-((jetzt2.getTime() -newswipe.zeit)/1000) 
+                              let ttl = (swipes_arr[lil].endzeit - drawjetzt)
 
-//ttl = Math.max(0,ttl)  
-//ttl = 10
-if (ttl>0)
-{farbe = "green"
-if (newswipe.dicke>5){farbe = "lime"}
-if (newswipe.dicke>10){farbe = "red"}
-if(newswipe.meldender == "sandro"){farbe="black"; newswipe.dicke=10}
-var polyline = L.polyline([newswipe.von,newswipe.nach],{weight:newswipe.dicke,color:farbe}).bindTooltip(newswipe.meldender).addTo(movement_layer);
+                        farbe = "green"
+                        if (swipes_arr[lil].dicke>5){farbe = "lime"}
+                        if (swipes_arr[lil].dicke>10){farbe = "red"}
+                        if(swipes_arr[lil].meldender == "sandro"){farbe="black"; swipes_arr[lil].dicke=10}
 
-var arrowHead = L.polylineDecorator(polyline, {    patterns: [   
-  { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ 
-  pixelSize: newswipe.dicke, polygon: false, 
-  pathOptions: { fillOpacity: 1, weight:newswipe.dicke,color:farbe } }) }    ]}).addTo(movement_layer);
-setTimeout(function(){
-polyline.remove()
-arrowHead.remove()
-},ttl*1000)}
+                        var polyline = L.polyline([swipes_arr[lil].von,swipes_arr[lil].nach],{weight:swipes_arr[lil].dicke,color:farbe}).bindTooltip(swipes_arr[lil].meldender).addTo(movement_layer);
+                        var arrowHead = L.polylineDecorator(polyline, {    patterns: [   
+                          { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ 
+                          pixelSize: swipes_arr[lil].dicke, polygon: false, 
+                          pathOptions: { fillOpacity: 1, weight:swipes_arr[lil].dicke,color:farbe } }) }    ]}).addTo(movement_layer);
+                        setTimeout(function(){
+                        polyline.remove()
+                        arrowHead.remove()
+                   
+                        },ttl*1000)
+                      
+                        polyline.on("click",function(){     swipes_arr[lil].endzeit = drawjetzt
+                          polyline.remove()
+                          arrowHead.remove()
+                          databaseRef =database.ref('soundstorm/SS24aux/day' + heutag + '/swipes')
+         databaseRef.set(swipes_arr)})
+                      
+                      }
+              }
+
 }
 function initialise_firebase(){
   
@@ -200,8 +212,7 @@ databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/swipes');
 databaseRef.on('value', (snapshot) => {
 if (snapshot.exists()) {
 swipes_arr = snapshot.val();
-jetzt2 = new Date()
-swipes_arr.forEach(draw_arrow)
+draw_arrow()
 } else {
 console.log("No data available");
 }
@@ -683,7 +694,7 @@ mymap.getContainer().addEventListener("touchend", function (e) {
        
           ntemp = new Date()
           ntemp = ntemp.getTime()
-          newEntry ={meldender:set_name,von:ort1, nach:ort2,zeit:parseInt(ntemp),dicke:www}
+          newEntry ={meldender:set_name,von:ort1, nach:ort2,zeit:parseInt(ntemp),endzeit:ntemp + (1000*60*5),dicke:www}
           swipes_arr.push(newEntry); // Add new entry to the array
       
           databaseRef =database.ref('soundstorm/SS24aux/day' + heutag + '/swipes')
