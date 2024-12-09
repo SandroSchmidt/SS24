@@ -51,7 +51,7 @@
     <div id="map_div" style="width:100%;height: 100%"></div></div>
   <div id="reo_div" style="float:left;width:40%;height:60%;text-align: center;">
     <br><br>
-  <img id="srlogo" src="./logosw.png" style="width: 60%" >
+  <img id="srlogo" src="./logosw.png" style="width: 60%">
   <br>
   <!--  <img src=".//safe_events_logo-1.png" style="width: 30%" id ="evtlog" onclick="d3.select('#evtlog').remove()" >
   -->
@@ -776,8 +776,9 @@ else{
   mymap.setView(setview9.grid,setview9.zoom)
 }
 
-mymap.on('zoomend', function() {setview9.zoom = mymap.getZoom();writedisp9ToFirebase() });
-mymap.on('moveend', function() { mapaa = (mymap.getCenter(),mymap.getCenter());setview9.grid=[mapaa.lat,mapaa.lng];writedisp9ToFirebase() });
+mymap.on('zoomend', function() {setview9.zoom = mymap.getZoom() });
+mymap.on('moveend', function() { mapaa = (mymap.getCenter(),mymap.getCenter());setview9.grid=[mapaa.lat,mapaa.lng] });
+
 
 fensterei = !fensterei
 mymap.invalidateSize();
@@ -791,9 +792,21 @@ console.log(fensterei)
 
 
  
+
+
+// Add an event listener for the 'keydown' event
+document.addEventListener('keydown', function(event) {
+    // Check if the hotkey combination is pressed (e.g., Ctrl + Shift + A)
+    if (event.key === 'a') {
+      writedisp9ToFirebase();
+      console.log("adsasd")
+    }
+});
+
+
  function writedisp9ToFirebase() {
  const database = firebase.database();
-  databaseRef = database.ref('soundstorm/SS24/Disp9')
+  databaseRef = database.ref('soundstorm/SS24').child('Disp9')
   databaseRef.set({setview9,logotoggle:logotoggle})
           
     }

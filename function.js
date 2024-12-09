@@ -42,6 +42,7 @@ return graphdata
 })
 }
 function draw_arrow(){
+  movement_layer.clearLayers()  
   drawjetzt = new Date().getTime()
     for (let lil=0;lil < swipes_arr.length;lil++){
               if(swipes_arr[lil].endzeit > drawjetzt)
