@@ -253,8 +253,8 @@ function update_ownpos(){
    infotag.text('status: own loc upt at '+ set_pos +" " + a.getHours()+":"+a.getMinutes()+":"+a.getSeconds())
    a =a.getTime()
    const database = firebase.database()
-     databaseRef = database.ref('soundstorm').child('locations24').child(set_name);
-    databaseRef.set({zeit:a,ort:set_pos})
+     databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations/spotter').child(set_name);
+    databaseRef.set({zeit:a,ort:set_pos,name:set_name})
            
         }
 

@@ -597,7 +597,7 @@ jetzt = new Date()
     userInput = prompt('describe marker:', '')
     if (userInput !== null) {
       randomNum = Math.floor(Math.random() * 9999) + 1;
-    databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations');
+    databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations/marker');
       eigensymbole_arr.marker.push({
       ort: [e.latlng.lat, e.latlng.lng],
       text: userInput,
@@ -607,7 +607,7 @@ jetzt = new Date()
   });
 
   // Save the updated data back to Firebase, using the array index as the key
-  databaseRef.set(eigensymbole_arr);
+  databaseRef.set(eigensymbole_arr.marker);
     
 
     
@@ -1095,7 +1095,7 @@ function draw_marker(){
 for(ip=0;ip<eigensymbole_arr.marker.length;ip++)
  { let u =ip
   if(eigensymbole_arr.marker[ip].zeige == true){
-  { 
+  
   let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:greenicon}).bindTooltip(eigensymbole_arr.marker[ip].text).addTo(eigensymbole_layer)//,
   tempmarker.on('click', function() {
     
@@ -1106,7 +1106,28 @@ for(ip=0;ip<eigensymbole_arr.marker.length;ip++)
   //databaseRef.set(eigensymbole_arr.marker)})
  // }}
  })
- }}}}
+ }}
+
+
+ Object.keys(eigensymbole_arr.spotter).forEach(key => {
+  console.log(key)
+  console.log(eigensymbole_arr.spotter[key].ort)
+
+  let tempmarker = L.marker(eigensymbole_arr.spotter[key].ort).bindTooltip(eigensymbole_arr.spotter[key].name).addTo(eigensymbole_layer)//,
+  tempmarker.on('click', function() {
+   tempmarker.remove()
+ 
+ // }}
+ })
+});
+
+
+
+}
+
+
+
+
   /*
 ww =[]
 for (f=0;f< zones_arr.length;f++){
