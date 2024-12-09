@@ -611,7 +611,8 @@ jetzt = new Date()
       meldender: set_name,
       zeige: true,
       farbe:tcolor,
-      zeit:jetzt.getTime()
+      zeit:jetzt.getTime(),
+      endzeit:jetzt.getTime()+(1000*60*5)
   });
 
   // Save the updated data back to Firebase, using the array index as the key
@@ -1100,11 +1101,16 @@ infotag.text("report sent ")
 
 function draw_marker(){
   eigensymbole_layer.clearLayers()
+drawjetzt = new Date ().getTime()
 
 for(let ip=0;ip<eigensymbole_arr.marker.length;ip++)
  { 
-          if(eigensymbole_arr.marker[ip].zeige == true){
-          
+
+  
+          if(eigensymbole_arr.marker[ip].zeige == true && eigensymbole_arr.marker[ip].endzeit > drawjetzt  ){
+           
+
+
                     if(eigensymbole_arr.marker[ip].farbe =="red"){tempico=redicon}else{tempico = greenicon}
                     let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:tempico}).bindTooltip(eigensymbole_arr.marker[ip].text).addTo(eigensymbole_layer)//,
                     tempmarker.on('click', function() {
@@ -1112,8 +1118,9 @@ for(let ip=0;ip<eigensymbole_arr.marker.length;ip++)
                    
                       tempmarker.remove()
              
-                    eigensymbole_arr.marker[ip].zeige = false
-                    console.log(eigensymbole_arr)
+                  //    eigensymbole_arr.marker[ip].zeige = false
+                     eigensymbole_arr.marker[ip].endzeit = drawjetzt
+                    //console.log(eigensymbole_arr)
                     databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations/marker');
                     databaseRef.set(eigensymbole_arr.marker)
                   })
