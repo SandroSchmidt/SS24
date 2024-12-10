@@ -502,7 +502,7 @@ maxZoom: 20
 }).addTo(mymap);
 
 
-imageUrl ="./zeichnung.svg"
+imageUrl ="./zeichnung.png"
 
 imageOverlay = L.imageOverlay(imageUrl, imageBounds);
 
