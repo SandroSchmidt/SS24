@@ -110,7 +110,7 @@ showline:true,
          
   // Format for displaying date on x-axis
 //range: [a, b],
-range: ['2024-12-09 16:59:00', '2024-12-10 04:00:00'],
+range: ['2024-12-10 16:59:00', '2024-12-11 04:00:00'],
 linecolor: 'black',
 linewidth: 2,
 mirror: true
