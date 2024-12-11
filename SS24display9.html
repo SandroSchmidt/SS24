@@ -113,21 +113,19 @@
   daydata = read_a_day(24,heutag)
 
   setTimeout(function(){total_people},3000)
-  /*
-  setInterval(function (){refresh()},180000)
-  ref.on('value', (snapshot) => {
-  current = snapshot.val()
-  for(i=0;i<stages_list.length;i++){
-  if(current[stages_list[i].name] != undefined){
-  */
+ 
+  databaseRef = database.ref('/soundstorm/SS24/Disp10/setview9');
+databaseRef.on('value', (snapshot) => {
+  const teror = snapshot.val();
+  console.log("Zoom gelesen:");
+  console.log(teror)
+
+  setTimeout(() => {mymap.setView(teror.grid, teror.zoom) }, 500); 
+})
 
 
-  databaseRef = database.ref('/soundstorm/SS24/Disp10');
-  databaseRef.on('value', (snapshot) => {
-  teror = snapshot.val()
-  //mymap.setView(teror)
 
-  })
+  
   function jetzt_plot_malen(welcher_plot){
 
 
@@ -368,18 +366,15 @@
   temp = tabero.append('tr')
   // temp.append('td').text(i)
 
-  if(stages_list[i].name == "Green Space 4"){
-  nurwegenneon ="Neon"
-  }else{nurwegenneon = stages_list[i].name}
-
-  butarr.push( temp.append('td').text(nurwegenneon)
+  if(stages_list[i].name != "Playground") 
+  {butarr.push( temp.append('td').text(stages_list[i].name)
   .style("cursor", "pointer").style("font-weight",700) 
         .on('click',  function(){ select_area(j)})  )
 
   tuc.push(temp.append("td").text("u"+i).style("font-weight",700).style("color","black"))
-
   tdc.push(temp.append("td").text("d"+i).style("font-weight",700).style("color","black"))
   ttc.push(temp.append("td").text("t"+i).style("font-weight",700).style("color","black"))
+  }
   //tpc.push(temp.append("td").text("p"+i).style("font-weight",700))
   }
   //tpc[5].style('color',"white")
@@ -481,7 +476,9 @@ settim = new Date()
 
 
   */
+  if(key != "Playground")
 
+{
 
 
   if (Math.round(graphdata[key].usage[settim_slot]) == NaN)[alert(graphdata[key].usage[settim_slot])]
@@ -515,7 +512,7 @@ settim = new Date()
 
   if(isNaN(graphdata[key].tension[settim_slot])){ttc[q].text("")}
   // tpc[q].style('background-color',farbskala[Math.round(graphdata[key].usage[settim_slot]/15)])
-  q++
+  q++}
   })
 
   /*
@@ -825,9 +822,9 @@ document.addEventListener('keydown', function(event) {
 });
 
 
- function writedisp9ToFirebase() {
+function writedisp9ToFirebase() {
   console.log("adsasd")
-  databaseRef = database.ref('soundstorm/SS24').child('Disp10')
+  databaseRef = database.ref('soundstorm/SS24/Disp10')
   databaseRef.set({setview9,logotoggle:logotoggle})
           
     }

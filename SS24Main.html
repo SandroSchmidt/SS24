@@ -328,12 +328,8 @@
   for (i=0;i<stages_list.length;i++){let j =i
   temp = tabero.append('tr')
   // temp.append('td').text(i)
-
-  if(stages_list[i].name == "Green Space 4"){
-  nurwegenneon ="Neon"
-  }else{nurwegenneon = stages_list[i].name}
-
-  butarr.push( temp.append('td').text(nurwegenneon)
+if(stages_list[i].name != "Playground") 
+{  butarr.push( temp.append('td').text(stages_list[i].name)
   .style("cursor", "pointer").style("font-weight",700) 
         .on('click',  function(){ select_area(j)})  )
 
@@ -342,7 +338,7 @@
   tdc.push(temp.append("td").text("d"+i).style("font-weight",700))
   ttc.push(temp.append("td").text("t"+i).style("font-weight",700))
   tpc.push(temp.append("td").text("p"+i).style("font-weight",700))
-  }
+  }}
   tpc[5].style('color',"white")
   tpc[13].style('color',"white")
   tpc[14].style('color',"white")
@@ -503,10 +499,10 @@ console.log(sliderpos)
 
 
   */
+if(key != "Playground")
 
-
-
-  if (Math.round(graphdata[key].usage[settim_slot]) == NaN)[alert(graphdata[key].usage[settim_slot])]
+{
+  if (Math.round(graphdata[key].usage[settim_slot]) == NaN){alert(graphdata[key].usage[settim_slot])}
   pfeil =" ◄"
   if(graphdata[key].usage[settim_slot]>graphdata[key].usage[settim_slot-1]){pfeil = " ▲"}
   if((graphdata[key].usage[settim_slot])<graphdata[key].usage[settim_slot-1]){pfeil =" ▼" }
@@ -538,7 +534,7 @@ console.log(sliderpos)
   if(isNaN(graphdata[key].tension[settim_slot])){ttc[q].text("")}
   // tpc[q].style('background-color',farbskala[Math.round(graphdata[key].usage[settim_slot]/15)])
   q++
-  })
+  }})
 
   /*
 
