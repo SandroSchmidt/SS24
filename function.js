@@ -100,7 +100,7 @@ databaseRef = database.ref('soundstorm/SS24/Version');
 databaseRef.once('value')
     .then(snapshot => {
         // Process the snapshot data here
-        const fireversion = snapshot.val();
+        fireversion = snapshot.val();
         if(overridedisplay9==false && deviceversion != fireversion){alert("You are using an old version of the crowd report app. please reload the site!")}              
     })
 
@@ -508,6 +508,7 @@ opacity: 0.5,      attribution: '&copy; <a href="https://openstreetmap.org/copyr
 
 var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+
 })
 
 var Jawg_Matrix =  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -611,11 +612,12 @@ for (f=0;f<vib_arr.length;f++)      {let fu = f;L.polygon(vib_arr[f].coords,{fil
 if(!overridedisplay9)
   {mymap.addControl(new L.Control.Fullscreen());
     L.control.layers(
-      {"dark":Jawg_Matrix ,"OSM": tl1,"img": imageOverlay,"sat":Esri_WorldImagery},
+      {"dark":Jawg_Matrix ,"light": tl1,"img": imageOverlay,"sat":Esri_WorldImagery},
       {"stages":stages_layer,"blocks":green_layer,"spotter+marker":eigensymbole_layer,"crowdflow" :movement_layer,
-      "parking lots":parkinglot_layer,"op-zones":zones_layer,"medical":aidstations_layer}).addTo(mymap);
+    "medical":aidstations_layer}).addTo(mymap);
       
   }
+  //  "parking lots":parkinglot_layer,"op-zones":zones_layer
   
 
 //ownmarker = L.marker(  [24.996,46.508]).addTo(mymap);
@@ -1046,10 +1048,10 @@ function writeReportToFirebase() {
   console.log(jetzt)
   d3.select('#lock').style('background-color',"yellow")
   
-  if (locked) {
+  if (locked || set_name == "demo" || deviceversion != fireversion) {
     infotag.text('can not send reports or swipes when -LOCKED-')
     return;
-  }
+  }else{
 const database = firebase.database();
 
   databaseRef = database.ref('soundstorm/SS24/day'+heutag).child(stages_list[set_area].name).child("zeit");
@@ -1122,7 +1124,7 @@ infotag.text("report sent ")
         databaseRef = database.ref('soundstorm').child('aktuell').child(stages_list[set_area].name);
         databaseRef.set({zeit:jetzt.getTime(), density: set_dens, tension: set_tens,  usage: set_usage})
 
-      
+      }
     }
 
 

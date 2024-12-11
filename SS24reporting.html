@@ -50,8 +50,14 @@
         locked= true;d3.select('#lock').text('LOCKED')
     
         if(set_name == 'medical'||set_name == 'demo'|| set_name == 'markB')
-    {locked = true;d3.select('#lock').text('LOCKED')}
-    else{locked = false; d3.select('#lock').text('UNLOCKED')}
+    {locked = true;d3.select('#lock').style('background-color','yellow').text('LOCKED')
+
+ 
+    }
+    else{locked = false; d3.select('#lock').text('UNLOCKED')
+    setTimeout(function (){d3.select('#lock').style('background-color','green')},800)
+
+    }
       
        // d3.select('#map_div').style('height','500px')       
        //if(set_name== 'marcel'||set_name== 'marc'||set_name== 'eric'){d3.select('#map_div').style('height','70%')}
