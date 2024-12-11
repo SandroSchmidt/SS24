@@ -706,7 +706,7 @@ mymap.getContainer().addEventListener("touchend", function (e) {
     if(move> minmove && move <maxmove && diff < 4){ 
       infotag.text("swipe reported. category:   "+ www/5)
   
-      if (locked) {
+      if (locked || daviceversion != fireversion) {
         infotag.text('can not send swipes when -LOCKED-')
         console.log("swipe while locked")
         return;
