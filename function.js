@@ -704,8 +704,7 @@ mymap.getContainer().addEventListener("touchend", function (e) {
     www = 5*diff
  
     if(move> minmove && move <maxmove && diff < 4){ 
-      infotag.text("swipe reported. category:   "+ www/5)
-  
+  console.log(set_name)
       if (locked || deviceversion != fireversion || set_name == "demo") {
         infotag.text('can not send swipes when -LOCKED-')
         console.log("swipe while locked")
@@ -720,6 +719,9 @@ mymap.getContainer().addEventListener("touchend", function (e) {
       
           databaseRef =database.ref('soundstorm/SS24aux/day' + heutag + '/swipes')
           databaseRef.set(swipes_arr)
+
+          infotag.text("swipe reported. category:   "+ www/5)
+  
           }
     }
   }
