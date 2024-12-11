@@ -35,7 +35,7 @@
 <tr>  <th>EAST-Gate </th><td><input oninput="cei =parseInt( this.value)"step=100 type="number"/></td><td><input oninput="ceo = parseInt(this.value)" step=100 type="number"/></td></tr>
 <tr>  <th>VIB-Gate </th><td><input oninput="cvi = parseInt(this.value)"step=100  type="number"/></td><td><input oninput="cvo = parseInt(this.value)" step=100 type="number"/></td></tr>
     <tr>
-    <td></td><td></td><td> <button style="float: right;" onclick="write_camcounts()">CAMCOUNTS to Database</button></td>
+    <td></td><td></td><td> <button style="float: right;" onclick="jetzt = new Date();write_camcounts()">CAMCOUNTS to Database</button></td>
   </tr>
   </table>
     <br><br>
@@ -48,7 +48,7 @@
 <tr>  <th>EAST-Gate </th><td><input oninput="sei = parseInt(this.value)"step=100 type="number"/></td><td><input oninput="seo = parseInt(this.value)" step=100 type="number"/></td></tr>
 <tr>  <th>VIB-Gate </th><td><input oninput="svi = parseInt(this.value)"step=100  type="number"/></td><td><input oninput="svo = parseInt(this.value)" step=100 type="number"/></td></tr>
     <tr>
-    <td></td><td></td><td> <button style="float: right;" onclick="write_scans()">SCANs to Database</button></td>
+    <td></td><td></td><td> <button style="float: right;" onclick="jetzt = new Date();write_scans()">SCANs to Database</button></td>
   </tr>
   </table>
     <button onclick="spotter_report()">Spotter Report</button>
@@ -71,7 +71,7 @@ database = firebase.database()
   // die logic der variablen ist C- camcounts, S- Scanns, West east VIB, In OUT - bsp sei -> scanns vom eastgate in
 function write_camcounts(){
   
-  jetzt = new Date()
+
   console.log("speichere Report : "+jetzt)
   databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/camcounts').child("zeit");
               databaseRef.transaction(function(currentArray) {
@@ -128,10 +128,29 @@ function write_camcounts(){
              currentArray.push(ceo+cwo+cvo);
               return currentArray;
              });
+
+           
 }
 
 function sendfakereport(){
+  cwi=0
+  cei=0
+  cvi=0
+  swi=0
+  sei=0
+  svi=0
+  cwo=0
+  ceo=0
+  cvo=0
+  swo=0
+  seo=0
+  svo=0
+   fakereportdate = new Date()
     jetzt = fakereportdate
+    
+    console.log("fakereporting " + jetzt)
+    write_camcounts()
+    write_scans()
     current ={
   "Big Beast Circle":{density:7,usage:55,tension:7},
   "Big Beast North":{density:7,usage:55,tension:7},
@@ -157,11 +176,23 @@ function sendfakereport(){
   "parking lot 7":{usage:0}
   
   }
+
+  // Todo - prio: 1/5 - hier ist einfach die zahl eingetragen, hier sollte aber die länge des stages arr eingesetzt erden
+  for (iooo=0;iooo<15;iooo++){ 
+  console.log("fsdf" +iooo)
+  set_area = iooo
+  set_dens = 0
+  set_tens=0
+  set_usage = 0
+  set_pos =[0,0]
+  set_name = "fake"
   writeReportToFirebase()
-  }
+}  
+
+}
    
 function write_scans(){
-  jetzt = new Date()
+  
   console.log("speichere Report : "+jetzt)
   databaseRef = database.ref('soundstorm/SS24aux/day'+heutag+'/scans').child("zeit");
               databaseRef.transaction(function(currentArray) {

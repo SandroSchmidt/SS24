@@ -124,7 +124,7 @@ showline:true,
          
   // Format for displaying date on x-axis
 //range: [a, b],
-range: ['2024-12-10 '+ (graphlinkegrenze-1) +':59:00', '2024-12-11 04:00:00'],
+range: ['2024-12-11 '+ (graphlinkegrenze-1) +':59:00', '2024-12-12 04:00:00'],
 linecolor: 'black',
 linewidth: 2,
 mirror: true
@@ -1044,8 +1044,8 @@ if (usage[i] !== undefined && usage[i] !== null && usage[i] !== '') {
 return { zeit: [], usage: [] };
 }
 function writeReportToFirebase() {
-  jetzt = new Date()
-  console.log(jetzt)
+  
+console.log(set_area)
   d3.select('#lock').style('background-color',"yellow")
   
   if (locked || set_name == "demo" || deviceversion != fireversion) {
@@ -1098,7 +1098,7 @@ const database = firebase.database();
 
 
 
-infotag.text("report sent ")
+             //if (infotag) infotag.text("report sent");
 
  
 

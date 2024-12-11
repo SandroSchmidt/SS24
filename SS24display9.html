@@ -117,8 +117,6 @@
   databaseRef = database.ref('/soundstorm/SS24/Disp10/setview9');
 databaseRef.on('value', (snapshot) => {
   const teror = snapshot.val();
-  console.log("Zoom gelesen:");
-  console.log(teror)
 
   setTimeout(() => {mymap.setView(teror.grid, teror.zoom) }, 500); 
 })
@@ -804,9 +802,9 @@ refresh()
 if(logotoggle){d3.select('#srlogo').style("width","60%")}else{d3.select('#srlogo').style("width","0%")}
 //Plotly.relayout('liu_div');
 //if (fensterei == 3){fensterei =0 }
-console.log(fensterei)
 
- },5000)
+
+ },10000)
 
 
  
@@ -823,7 +821,7 @@ document.addEventListener('keydown', function(event) {
 
 
 function writedisp9ToFirebase() {
-  console.log("adsasd")
+
   databaseRef = database.ref('soundstorm/SS24/Disp10')
   databaseRef.set({setview9,logotoggle:logotoggle})
           
