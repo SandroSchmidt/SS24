@@ -305,7 +305,7 @@ parking_list.tooltip[i].setContent("parking lot "+ (i+1)+ " - " + temp + " %" )
 
 for(i=0;i<medstations.length;i++){
 
-medstations[i].geo.setTooltipContent(medstations[i].name +"<br>"+current["aid station "+(1+i)].usage + " / " +medstations[i].capacity+" patients")
+medstations[i].geo.setTooltipContent(medstations[i].name )//+"<br>"+current["aid station "+(1+i)].usage + " / " +medstations[i].capacity+" patients")
 temp = (current["aid station "+(1+i)].usage/medstations[i].capacity)
 if(temp > 0.8)
 {medstations[i].geo.setIcon(mediconring)
@@ -494,7 +494,7 @@ draw_arrow (swipes_arr[key].von,swipes_arr[key].nach,"green",swipes_arr[key].dic
 function initialise_map(){
 
 // Karte und Hintergründe
-mymap = L.map('map_div',{zoomSnap: 0.1, dragging: false,minZoom:14,maxZoom:20}).setView([24.99646971811259, 46.5075],16.3 )
+mymap = L.map('map_div',{zoomSnap: 0.1, dragging: false,minZoom:16.5,maxZoom:20}).setView([24.99646971811259, 46.5075],16.3 )
 if (overridedisplay9){ mymap.zoomControl.remove();}
 
 // mymap.on('zoomend', function() {setviewzoom = mymap.getZoom()});
@@ -551,6 +551,25 @@ parkinglot_layer = L.layerGroup().addTo(mymap)
 zones_layer = L.layerGroup()
 back_layer = L.layerGroup().addTo(mymap)
 aidstations_layer = L.layerGroup().addTo(mymap)
+
+if(set_name == "sandro" || set_name == "demo"){
+  
+mymap.dragging.enable();
+mymap.touchZoom.enable();
+mymap.doubleClickZoom.enable();
+mymap.scrollWheelZoom.enable();
+
+// Remove the touch event listeners using D3
+d3.select(mymap.getContainer())
+  .on("touchstart", null)
+  .on("touchend", null);
+
+  console.log("drag anstelle von swipe")
+}
+
+
+
+
 // alles einmalen das keine Bühnen sind
 for (f=0;f<parking_arr.length;f++)  {
 
@@ -705,7 +724,7 @@ mymap.getContainer().addEventListener("touchend", function (e) {
  
     if(move> minmove && move <maxmove && diff < 4){ 
   console.log(set_name)
-      if (locked || deviceversion != fireversion || set_name == "demo") {
+      if (locked || deviceversion != fireversion || set_name == "demo" || set_name == "sandro") {
         infotag.text('can not send swipes when -LOCKED-')
         console.log("swipe while locked")
         return;
@@ -801,7 +820,7 @@ bucket = new Array(53).fill(undefined)
 temp = new Date(indata.zeit[0])
 //indata.zeit[0] = temp.getTime()
 //indata.usage[0] = 0 
-temp = temp.setHours(12,0,0,0)
+temp = temp.setHours(graphlinkegrenze,0,0,0)
 
 for (i=0;i<indata.zeit.length;i++){
 
@@ -856,7 +875,7 @@ bucket = new Array(53).fill(undefined)
 temp = new Date(indata.zeit[0])
 //indata.zeit[0] = temp.getTime()
 //indata.usage[0] = 0 
-temp = temp.setHours(12,0,0,0)
+temp = temp.setHours(graphlinkegrenze,0,0,0)
 
 for (i=0;i<indata.zeit.length;i++){
 
@@ -945,7 +964,7 @@ temp = new Date(indata.zeit[0])
 //indata.zeit[0] = temp.getTime()
 //indata.usage[0] = 0 
 
-temp = temp.setHours(12,0,0,0)
+temp = temp.setHours(graphlinkegrenze,0,0,0)
 
 // der fixe wert capacity der in der stages_list manuelll vegeben wurde * die auslastung ergibt die anzahlen
 // capacity =
@@ -1149,8 +1168,8 @@ for(let ip=0;ip<eigensymbole_arr.marker.length;ip++)
 
                     if(eigensymbole_arr.marker[ip].farbe =="red"){tempico=redicon}else{tempico = greenicon}
                     let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:tempico}).bindTooltip(eigensymbole_arr.marker[ip].text+ " - " +  getTimeOfDay (eigensymbole_arr.marker[ip].zeit)).addTo(eigensymbole_layer)//,
-                    tempmarker.openTooltip()
-                    tempmarker.on('click', function() {
+                   if(!overridedisplay9){ tempmarker.openTooltip()
+}                   if(set_name != "demo"){ tempmarker.on('click', function() {
               
                    
                       tempmarker.remove()
@@ -1160,7 +1179,7 @@ for(let ip=0;ip<eigensymbole_arr.marker.length;ip++)
                     //console.log(eigensymbole_arr)
                     databaseRef = database.ref('soundstorm/SS24aux/day' + heutag + '/locations/marker');
                     databaseRef.set(eigensymbole_arr.marker)
-                  })
+                  })}
                 
                   
         }

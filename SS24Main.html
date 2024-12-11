@@ -381,7 +381,7 @@ if(stages_list[i].name != "Playground")
 
 
   slider =  d3.select('#katze').append('input').attr('type','range').style('width',"96%").style('height',"3%").style('margin','auto').style('display', 'block')
-  .attr("id","timeslider").attr('max',44).attr('min',0).attr('step',1).on('change',
+  .attr("id","timeslider").attr('max',graphbreiteinviertelstunden).attr('min',0).attr('step',1).on('change',
 
     function(){
 realtime =false
@@ -389,9 +389,9 @@ realtime =false
     settim.setHours(graphlinkegrenze,0,0,0) 
     settim = settim.getTime() + this.value*60*1000*15
           currentTimestamp = settim
-    settim_slot = this.value
+    //settim_slot = this.value
     settim = new Date(settim)
-
+console.log(settim_slot)
 
         refresh();})
 
@@ -429,18 +429,32 @@ realtime =false
 
   }
   function refresh(){
-draw_arrow()
-draw_marker()
+    if (realtime == true){settim = new Date()}
+    temp = settim.getTime()
+  for ( i=0 ;i<graphdata["Big Beast Left"].zeit.length-1;i++){
+  if(temp >= graphdata["Big Beast Left"].zeit[i] &&temp < graphdata["Big Beast Left"].zeit[i+1]){
+  settim_slot = i
+  }
+  }
+  currentTimestamp = settim
+    draw_arrow()
+  draw_marker()
+  console.log(settim)
+  console.log(settim_slot)
+  slider.property("value",settim_slot)
 
-//sliderpos = Math.ceil((settim.getTime() - new Date("2024-12-10T14:00").getTime())/(60*1000*7))
-
-//    slider.property("value",sliderpos)
-  //hier gehts weiter
+//hier gehts weiter
     for(i=0;i<stages_list.length;i++){
                   if(graphdata[stages_list[i].name] != undefined){
                     temp = graphdata[stages_list[i].name]
                     let  fcol = farbskala[Math.round(temp.usage[settim_slot]/10)]
                     let col = farbskala[Math.min(10,Math.round(temp.density[settim_slot])*2)]
+
+
+if(current[stages_list[i].name].zeit < settim.getTime()-60*1000*10){fcol="grey";console.log("asdnkandlasbdlasbdlkjfkjbfdkjbgkjdfbs")}
+console.log(current[stages_list[i].name].zeit + "fsdfsdf")
+console.log(settim.getTime()-60*1000*10)
+
                   if(Math.min(10,Math.round(temp.density[settim_slot])*2) > 0  )
                   {  stages_list[i].geo.setStyle({
                     //   opacity:1,
@@ -454,12 +468,7 @@ draw_marker()
 
 
 
-  temp = settim.getTime()
-  for ( i=0 ;i<graphdata["Big Beast Left"].zeit.length-1;i++){
-  if(temp >= graphdata["Big Beast Left"].zeit[i] &&temp < graphdata["Big Beast Left"].zeit[i+1]){
-  settim_slot = i
-  }
-  }
+  
 
 
   field_inc.text(Math.round(count_datain.usage[settim_slot]).toLocaleString('en-US'))
@@ -473,7 +482,7 @@ draw_marker()
 
   q=0
   Object.keys(graphdata).forEach((key) => {
-  tempart = current[stages_list[q].name]
+  //tempart = current[stages_list[q].name]
   //let  fcol = 
   /*
   möglichkeit neue objekte einzufügen und ereignisse 
@@ -666,10 +675,9 @@ if(key != "Playground")
   }
   d3.select("#timeslider").attr('max',graphbreiteinviertelstunden)
   function nowbutton(){
-
-  settim = new Date()
-  currentTimestamp = settim
-  refresh()
+    settim = new Date()
+autoplay = false
+    refresh()
 
   }
   //// diese Funktion ist unter gleichem namen aber mit anderen funktionen in der report ansicht
@@ -768,6 +776,15 @@ if(key != "Playground")
   }}
 
   return Math.round(found)}
+
+
+  setInterval(() => {
+    realtime = true
+    refresh()
+  
+}, 60000);
+
+
   function autplay_starten (){
   setTimeout(function(){
   set_playtime =0
