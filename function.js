@@ -43,9 +43,11 @@ return graphdata
 }
 function draw_arrow(){
   movement_layer.clearLayers()  
-  drawjetzt = new Date().getTime()
+if(realtime == true){drawjetzt = new Date().getTime();puffer =0}else{drawjetzt=settim;puffer = (1000*60*7)}
+  
+
     for (let lil=0;lil < swipes_arr.length;lil++){
-              if(swipes_arr[lil].endzeit > drawjetzt)
+              if(swipes_arr[lil].endzeit+puffer > drawjetzt && swipes_arr[lil].zeit-puffer < drawjetzt)
                               {
 
                               let ttl = (swipes_arr[lil].endzeit - drawjetzt)
@@ -55,18 +57,18 @@ function draw_arrow(){
                         if (swipes_arr[lil].dicke>10){farbe = "red"}
                         if(swipes_arr[lil].meldender == "sandro"){farbe="black"; swipes_arr[lil].dicke=10}
 
-                        var polyline = L.polyline([swipes_arr[lil].von,swipes_arr[lil].nach],{weight:swipes_arr[lil].dicke,color:farbe}).bindTooltip(swipes_arr[lil].meldender).addTo(movement_layer);
+                        var polyline = L.polyline([swipes_arr[lil].von,swipes_arr[lil].nach],{weight:swipes_arr[lil].dicke,color:farbe}).bindTooltip(swipes_arr[lil].meldender + " - " +  getTimeOfDay (swipes_arr[lil].zeit)).addTo(movement_layer);
                       //  polyline.openTooltip()
                         var arrowHead = L.polylineDecorator(polyline, {    patterns: [   
                           { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ 
-                          pixelSize: swipes_arr[lil].dicke, polygon: false, 
+                          pixelSize: swipes_arr[lil].dicke+5, polygon: false, 
                           pathOptions: { fillOpacity: 1, weight:swipes_arr[lil].dicke,color:farbe } }) }    ]}).addTo(movement_layer);
                         setTimeout(function(){
                         polyline.remove()
                         arrowHead.remove()
                    
                         },ttl*1000)
-                      
+
                         polyline.on("click",function(){     swipes_arr[lil].endzeit = drawjetzt
                           polyline.remove()
                           arrowHead.remove()
@@ -91,6 +93,18 @@ measurementId: "G-00674BETEZ"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+database = firebase.database();
+deviceversion = 3.1
+databaseRef = database.ref('soundstorm/SS24/Version');
+// Read the data once
+databaseRef.once('value')
+    .then(snapshot => {
+        // Process the snapshot data here
+        const fireversion = snapshot.val();
+        if(overridedisplay9==false && deviceversion != fireversion){alert("You are using an old version of the crowd report app. please reload the site!")}              
+    })
+
+
 
 }  
 function initialise_chart(data,plot_title){
@@ -110,7 +124,7 @@ showline:true,
          
   // Format for displaying date on x-axis
 //range: [a, b],
-range: ['2024-12-10 16:59:00', '2024-12-11 04:00:00'],
+range: ['2024-12-10 '+ (graphlinkegrenze-1) +':59:00', '2024-12-11 04:00:00'],
 linecolor: 'black',
 linewidth: 2,
 mirror: true
@@ -487,6 +501,7 @@ if (overridedisplay9){ mymap.zoomControl.remove();}
 // mymap.on('moveend', function() { mapaa = (mymap.getCenter(),mymap.getCenter());setviewmap=[mapaa.lat,mapaa.lng]});
 
 
+
 tl1= L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{      
 opacity: 0.5,      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
 });
@@ -499,9 +514,11 @@ var Jawg_Matrix =  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 subdomains: 'abcd',
 maxZoom: 20
-}).addTo(mymap);
+})
 
-
+if(overridedisplay9){
+  Jawg_Matrix.addTo(mymap);
+}else{tl1.addTo(mymap)}
 imageUrl ="./zeichnung.svg"
 
 imageOverlay = L.imageOverlay(imageUrl, imageBounds);
@@ -583,12 +600,12 @@ let polygon = L.polygon(inert_arr[f].coords, {color: inert_arr[f].color}).bindTo
 for (f=0;f<medstations.length;f++) {medstations[f].geo = L.marker(medstations[f].coords,{icon:medicon}).bindTooltip(medstations[f].name)
 //medstations[f].geo .on("mouserover",function(e){this.openPopup()})
 medstations[f].geo.addTo(aidstations_layer)}
-for (f=0;f<greening_arr.length;f++) {let fu = f;L.polygon(greening_arr[f].coords, {color: 'green', "weight": 1,"opacity": 0.65 }).bindTooltip(greening_arr[f].name).addTo(green_layer)}
+for (f=0;f<greening_arr.length;f++) {let fu = f;L.polygon(greening_arr[f].coords, {color: 'green', "weight": 1,"opacity": 0.65, "fillOpacity":0.5 }).bindTooltip(greening_arr[f].name).addTo(green_layer)}
 for (f=0;f<restrooms.length;f++) {L.marker(restrooms[f],{icon:resticon}).addTo(green_layer)}
-for (f=0;f<blocking_arr.length;f++) {let fu = f; L.polygon(blocking_arr[f].coords, {fillColor: 'grey',color:"black", "weight": 1,"opacity": 0.8}).bindTooltip(blocking_arr[f].name).addTo(green_layer)}
+for (f=0;f<blocking_arr.length;f++) {let fu = f; L.polygon(blocking_arr[f].coords, {fillColor: "#748cad",color:"black", "weight": 1,"opacity": 1,fillOpacity:0.8}).bindTooltip(blocking_arr[f].name).addTo(green_layer)}
 
-for (f=0;f<hinter.length;f++)       {let fu = f;L.polygon(hinter[f], {color: 'grey' ,"weight": 2,"fillOpacity": 0.65}).on('mouseover',function(){infotag.text("you hover on back_block "+fu)}).addTo(back_layer)}
-for (f=0;f<vib_arr.length;f++)      {let fu = f;L.polygon(vib_arr[f].coords,{fillColor: '#cc99ff',fillOpacity:1,color:"black",weight:1}).bindTooltip(vib_arr[f].name).addTo(green_layer)}
+for (f=0;f<hinter.length;f++)       {let fu = f;L.polygon(hinter[f], {color: 'grey' ,"weight": 2,"fillOpacity": 0.65}).on('mouseover',function(){infotag.text("you hover on back_block "+fu)}).addTo(green_layer)}
+for (f=0;f<vib_arr.length;f++)      {let fu = f;L.polygon(vib_arr[f].coords,{fillColor: '#6e737a',fillOpacity:1,color:"black",weight:1}).bindTooltip(vib_arr[f].name).addTo(green_layer)}
 
 // Layercontroll
 if(!overridedisplay9)
@@ -678,7 +695,7 @@ mymap.getContainer().addEventListener("touchend", function (e) {
     ort2 = mymap.containerPointToLatLng([touchEndX,touchEndY]);
     console.log("touchend")
     minmove = 0.0002
-    maxmove = 0.005
+    maxmove = 0.002
     move = Math.abs(ort1.lat - ort2.lat) + Math.abs(ort1.lng - ort2.lng)
     end_date = new Date()   
     diff = Math.ceil((end_date.getTime()-start_time.getTime())/500)
@@ -780,13 +797,13 @@ bucket = new Array(53).fill(undefined)
 temp = new Date(indata.zeit[0])
 //indata.zeit[0] = temp.getTime()
 //indata.usage[0] = 0 
-temp = temp.setHours(17,0,0,0)
+temp = temp.setHours(12,0,0,0)
 
 for (i=0;i<indata.zeit.length;i++){
 
 entfernungzu15uhr = parseInt(Math.round((indata.zeit[i]-temp)/(15*60*1000)))
     
-if(entfernungzu15uhr > -1 && entfernungzu15uhr<53){
+if(entfernungzu15uhr > -1 && entfernungzu15uhr<65){
 if (bucket[entfernungzu15uhr] == undefined){bucket[entfernungzu15uhr] = [indata.in[i]]}
   else{bucket[entfernungzu15uhr].push(indata.in[i])}
 }
@@ -835,14 +852,14 @@ bucket = new Array(53).fill(undefined)
 temp = new Date(indata.zeit[0])
 //indata.zeit[0] = temp.getTime()
 //indata.usage[0] = 0 
-temp = temp.setHours(15,0,0,0)
+temp = temp.setHours(12,0,0,0)
 
 for (i=0;i<indata.zeit.length;i++){
 
 entfernungzu15uhr = parseInt(Math.round((indata.zeit[i]-temp)/(15*60*1000)))
 
 
-if(entfernungzu15uhr > -1 && entfernungzu15uhr<53){
+if(entfernungzu15uhr > -1 && entfernungzu15uhr<(graphbreiteinviertelstunden+1)){
 if (bucket[entfernungzu15uhr] == undefined){bucket[entfernungzu15uhr] = [indata.usage[i]]}
 else{bucket[entfernungzu15uhr].push(indata.usage[i])}
 }
@@ -924,7 +941,7 @@ temp = new Date(indata.zeit[0])
 //indata.zeit[0] = temp.getTime()
 //indata.usage[0] = 0 
 
-temp = temp.setHours(10,0,0,0)
+temp = temp.setHours(12,0,0,0)
 
 // der fixe wert capacity der in der stages_list manuelll vegeben wurde * die auslastung ergibt die anzahlen
 // capacity =
@@ -933,7 +950,7 @@ for (i=0;i<indata.zeit.length;i++){
 
 entfernungzu15uhr = parseInt(Math.round((indata.zeit[i]-temp)/(15*60*1000)))
 
-if(entfernungzu15uhr > -1 && entfernungzu15uhr<53){
+if(entfernungzu15uhr > -1 && entfernungzu15uhr<(graphbreiteinviertelstunden+1)){
 
 if (bucket_density[entfernungzu15uhr] == undefined){
 bucket_density[entfernungzu15uhr] = [indata.density[i]]}
@@ -1116,18 +1133,18 @@ infotag.text("report sent ")
 
 function draw_marker(){
   eigensymbole_layer.clearLayers()
-drawjetzt = new Date ().getTime()
+  if(realtime == true){drawjetzt = new Date().getTime();puffer =0}else{drawjetzt=settim;puffer = (1000*60*7)}
+  
+                        
 
 for(let ip=0;ip<eigensymbole_arr.marker.length;ip++)
- { 
-
-  
-          if(eigensymbole_arr.marker[ip].zeige == true && eigensymbole_arr.marker[ip].endzeit > drawjetzt  ){
+ {   
+          if(eigensymbole_arr.marker[ip].endzeit+puffer > drawjetzt && eigensymbole_arr.marker[ip].zeit-puffer < drawjetzt ){
            
 
 
                     if(eigensymbole_arr.marker[ip].farbe =="red"){tempico=redicon}else{tempico = greenicon}
-                    let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:tempico}).bindTooltip(eigensymbole_arr.marker[ip].text).addTo(eigensymbole_layer)//,
+                    let tempmarker = L.marker(eigensymbole_arr.marker[ip].ort,{icon:tempico}).bindTooltip(eigensymbole_arr.marker[ip].text+ " - " +  getTimeOfDay (eigensymbole_arr.marker[ip].zeit)).addTo(eigensymbole_layer)//,
                     tempmarker.openTooltip()
                     tempmarker.on('click', function() {
               
@@ -1189,3 +1206,13 @@ yauslpp = -   (24.99899094193483- 24.995559147406844)/86.33//113
 
 
 */
+function getTimeOfDay(milliseconds) {
+  const date = new Date(milliseconds);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+
+// Version

@@ -385,14 +385,15 @@
 
 
   slider =  d3.select('#katze').append('input').attr('type','range').style('width',"96%").style('height',"3%").style('margin','auto').style('display', 'block')
-  .attr('max',44).attr('min',0).attr('step',1).on('change',
+  .attr("id","timeslider").attr('max',44).attr('min',0).attr('step',1).on('change',
 
     function(){
-    settim = new Date("2024-12-09T17:00")
-    settim= settim.getTime() + this.value*60*1000*15 
-    //settim = Math.round(settim/(1000*15*60))*1000*15*60
-    currentTimestamp = settim
-    settim_slot = this.value-2
+realtime =false
+    settim = new Date()
+    settim.setHours(graphlinkegrenze,0,0,0) 
+    settim = settim.getTime() + this.value*60*1000*15
+          currentTimestamp = settim
+    settim_slot = this.value
     settim = new Date(settim)
 
 
@@ -432,7 +433,12 @@
 
   }
   function refresh(){
+draw_arrow()
+draw_marker()
 
+sliderpos = Math.ceil((settim.getTime() - new Date("2024-12-10T14:00").getTime())/(60*1000*7))
+console.log(sliderpos)
+    slider.property("value",sliderpos)
   //hier gehts weiter
     for(i=0;i<stages_list.length;i++){
                   if(graphdata[stages_list[i].name] != undefined){
@@ -662,10 +668,11 @@
   */
   initialise_chart(data,"usage")     
   }
+  d3.select("#timeslider").attr('max',graphbreiteinviertelstunden)
   function nowbutton(){
 
   settim = new Date()
-
+  currentTimestamp = settim
   refresh()
 
   }

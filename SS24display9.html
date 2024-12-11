@@ -676,6 +676,7 @@ settim = new Date()
   //dens_slider.node().dispatchEvent(new Event('input'));
 
   }
+  d3.select("#timeslider").attr('max',graphbreiteinviertelstunden)
   function interpolate(u){
 
   temp=0
@@ -801,6 +802,7 @@ mymap.on('moveend', function() { mapaa = (mymap.getCenter(),mymap.getCenter());s
 
 fensterei = !fensterei
 mymap.invalidateSize();
+realtime = true
 refresh()
 if(logotoggle){d3.select('#srlogo').style("width","60%")}else{d3.select('#srlogo').style("width","0%")}
 //Plotly.relayout('liu_div');
