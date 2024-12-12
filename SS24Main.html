@@ -30,7 +30,7 @@
 
   <div id="lio_div" style="float:left;width:50%;height:60%;"><div id="map_div" style="width:100%;height: 100%"></div></div>
   <div id="reo_div" style="float:left;width:40%;height:60%;text-align: center;">
-  <img src="./logo.PNG" style="width: 60%" onclick="selected_area.id =99; make_cul_graph()">
+  <img src="./logo.png" style="width: 60%" onclick="selected_area.id =99; make_cul_graph()">
   <!--  <img src=".//safe_events_logo-1.png" style="width: 30%" id ="evtlog" onclick="d3.select('#evtlog').remove()" >
   -->
   </div>
@@ -805,32 +805,35 @@ autoplay = false
   },15000)}
 
 
-read_hugo()
-function read_hugo(){
-  const url = 'https://c-ss24-dataapi.shared.tait.world/count/day1';
-const headers = {
-    'accept': 'application/json',
-    'access-token': 'yywLUMdsxUS8Qtu1'
-};
 
-fetch(url, {
-    method: 'GET',
-    headers: headers
-})
+  function fetchData() {
+    const url = 'https://c-ss24-dataapi.shared.tait.world/count/day1';
+    const headers = {
+        'accept': 'application/json',
+        'access-token': 'yywLUMdsxUS8Qtu1'
+    };
+
+    fetch(url, {
+        method: 'GET',
+        headers: headers
+    })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
         console.log('Data received:', data);
-        // You can process the data here
+        // Process the data as needed
     })
     .catch(error => {
         console.error('Error fetching data:', error);
     });
 }
+
+// Call the function
+fetchData();
 
 
 
