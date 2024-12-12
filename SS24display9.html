@@ -151,12 +151,13 @@ databaseRef.on('value', (snapshot) => {
   progres2 = estimateProgression({usage:addArrays(count_data.IN,count_data.OUT),zeit:count_data.zeit},2)
   progres3 = estimateProgression({usage:addArrays(count_data.IN,count_data.OUT),zeit:count_data.zeit},3)
 
+  filteredData= {zeit: total_people.zeit.slice(0, settim_slot + 1),usage: total_people.usage.slice(0, settim_slot + 1), }
 
 
   data.push(
   {
-  x:  total_people.zeit, //neu graph_data[selected_area.id].data_time,
-  y:  total_people.usage, //neu graph_data[selected_area.id].data,
+  x:  filteredData.zeit, //neu graph_data[selected_area.id].data_time,
+  y:  filteredData.usage, //neu graph_data[selected_area.id].data,
 
   yaxis:"y1",
   mode: 'lines',   fill: 'tozeroy',
@@ -610,13 +611,17 @@ settim = new Date()
   line: {shape: 'spline',color:"green"},
   type: 'scatter'    }
   )
+
+
+  filteredData= {zeit: total_people.zeit.slice(0, settim_slot + 1),usage: total_people.usage.slice(0, settim_slot + 1), }
+
   data.push(
 
 
 
   {
-  x:  total_people.zeit, //neu graph_data[selected_area.id].data_time,
-  y:  total_people.usage, //neu graph_data[selected_area.id].data,
+  x:  filteredData.zeit, //neu graph_data[selected_area.id].data_time,
+  y:  filteredData.usage, //neu graph_data[selected_area.id].data,
 
   yaxis:"y1",
   mode: 'lines',   fill: 'tozeroy',
