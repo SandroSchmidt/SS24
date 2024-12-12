@@ -554,7 +554,7 @@ aidstations_layer = L.layerGroup().addTo(mymap)
 
 
 setTimeout(() => {
-  if(set_name == "sandro" || set_name == "demo" && overridereport != true){
+  if((set_name == "sandro" || set_name == "demo") && overridereport != true){
   
     mymap.dragging.enable();
     mymap.touchZoom.enable();
