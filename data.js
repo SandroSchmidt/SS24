@@ -2,6 +2,7 @@ graphlinkegrenze = 16
 graphbreiteinviertelstunden = 48//(28-graphlinkegrenze)*4
 incident_toggle =true
 overridedisplay9 = false
+overridereport = false
 parking_list ={geo:[],tooltip:[],usage:[]}
 fenster = {hoehe:window.innerHeight-30,breite:window.innerWidth-35};
 existing_markers=[]
