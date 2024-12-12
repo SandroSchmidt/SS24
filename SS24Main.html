@@ -803,5 +803,38 @@ autoplay = false
   )
 
   },15000)}
+
+
+read_hugo()
+function read_hugo(){
+  const url = 'https://c-ss24-dataapi.shared.tait.world/count/day1';
+const headers = {
+    'accept': 'application/json',
+    'access-token': 'yywLUMdsxUS8Qtu1'
+};
+
+fetch(url, {
+    method: 'GET',
+    headers: headers
+})
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data received:', data);
+        // You can process the data here
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+}
+
+
+
+
+
   </script>
 </html>
