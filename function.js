@@ -552,20 +552,24 @@ zones_layer = L.layerGroup()
 back_layer = L.layerGroup().addTo(mymap)
 aidstations_layer = L.layerGroup().addTo(mymap)
 
-if(set_name == "sandro" || set_name == "demo"){
+
+setTimeout(() => {
+  if(set_name == "sandro" || set_name == "demo" && overridereport != true){
   
-mymap.dragging.enable();
-mymap.touchZoom.enable();
-mymap.doubleClickZoom.enable();
-mymap.scrollWheelZoom.enable();
-
-// Remove the touch event listeners using D3
-d3.select(mymap.getContainer())
-  .on("touchstart", null)
-  .on("touchend", null);
-
-  console.log("drag anstelle von swipe")
-}
+    mymap.dragging.enable();
+    mymap.touchZoom.enable();
+    mymap.doubleClickZoom.enable();
+    mymap.scrollWheelZoom.enable();
+    
+    // Remove the touch event listeners using D3
+    d3.select(mymap.getContainer())
+      .on("touchstart", null)
+      .on("touchend", null);
+    
+      console.log("drag anstelle von swipe")
+    }
+      
+}, 1000);
 
 
 
