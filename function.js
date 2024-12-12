@@ -494,7 +494,7 @@ draw_arrow (swipes_arr[key].von,swipes_arr[key].nach,"green",swipes_arr[key].dic
 function initialise_map(){
 
 // Karte und Hintergründe
-mymap = L.map('map_div',{zoomSnap: 0.1, dragging: false,minZoom:16.5,maxZoom:20}).setView([24.99646971811259, 46.5075],16.3 )
+mymap = L.map('map_div',{zoomSnap: 0.1, dragging: false,minZoom:15,maxZoom:20}).setView([24.99646971811259, 46.5075],16.3 )
 if (overridedisplay9){ mymap.zoomControl.remove();}
 
 // mymap.on('zoomend', function() {setviewzoom = mymap.getZoom()});
