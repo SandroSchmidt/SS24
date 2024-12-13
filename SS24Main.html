@@ -860,5 +860,38 @@ fetch(url, {
 
 
    d3.select('body').append("button").text("play").on('click',function (){autoplay_starten ()})
+
+
+
+
+
+   d3.select('body').append("button").text("fetch unified").on('click',function (){
+
+ //  The URL you provided appears to be for a Kibana dashboard. To interact with such a dashboard programmatically, you would typically use Kibana's REST API. Here's how you could do it using fetch in JavaScript:
+//Example for Accessing a Kibana Dashboard via REST API
+
+const url = "http://vpn01.unifiedcommand.com:5601/s/soundstorm/api/saved_objects/dashboard/77fd8a61-c5dc-4cf4-9861-359d408a04b6";
+const username = "SoundStorm"; // Replace with your username
+const password = "#SoundStorm23$$!"; // Replace with your password
+
+fetch(url, {
+    method: "GET",
+    headers: {
+        "Authorization": "Basic " + btoa(username + ":" + password),
+        "kbn-xsrf": "true", // Required for Kibana API calls
+        "Content-Type": "application/json"
+    }
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+})
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+   })
+
+
   </script>
 </html>
