@@ -385,13 +385,13 @@ if(stages_list[i].name != "Playground")
 
     function(){
 realtime =false
-    settim = new Date()
+    settim = new Date("2024-12-12")
     settim.setHours(graphlinkegrenze,0,0,0) 
     settim = settim.getTime() + this.value*60*1000*15
           currentTimestamp = settim
     //settim_slot = this.value
     settim = new Date(settim)
-console.log(settim_slot)
+
 
         refresh();})
 
@@ -429,6 +429,7 @@ console.log(settim_slot)
 
   }
   function refresh(){
+
     if (realtime == true){settim = new Date()}
     temp = settim.getTime()
   for ( i=0 ;i<graphdata["Big Beast Left"].zeit.length-1;i++){
@@ -452,8 +453,6 @@ console.log(settim_slot)
 
 
 if(current[stages_list[i].name].zeit < settim.getTime()-60*1000*10){fcol="grey";console.log("asdnkandlasbdlasbdlkjfkjbfdkjbgkjdfbs")}
-console.log(current[stages_list[i].name].zeit + "fsdfsdf")
-console.log(settim.getTime()-60*1000*10)
 
                   if(Math.min(10,Math.round(temp.density[settim_slot])*2) > 0  )
                   {  stages_list[i].geo.setStyle({
@@ -648,7 +647,7 @@ if(key != "Playground")
   //filteredData = total_people //().filter(d => d.zeit.getTime() <= currentTimestamp.getTime());
 
   filteredData= {zeit: total_people.zeit.slice(0, settim_slot + 1),usage: total_people.usage.slice(0, settim_slot + 1), }
- console.log(total_people)
+
     data.push(
 
 
@@ -794,15 +793,31 @@ autoplay = false
 }, 60000);
 
 
-  function autplay_starten (){
+  function autoplay_starten (){
   setTimeout(function(){
   set_playtime =0
   setInterval(function(){
+    realtime = false
+    settim= new Date("2024-12-12T16:00")
+  settim.setHours(graphlinkegrenze,0,0,0) 
+  settim = settim.getTime()
 
-  settim= new Date().getTime()
-    settim += (set_playtime*(60*1000*15))-(60*60*1000)
-    settim_slot = set_playtime-4
+  settim += (set_playtime*(60*1000*15))//-(60*60*1000)
+      //settim = settim.getTime() + this.value*60*1000*15
+          currentTimestamp = settim
+    //settim_slot = this.value
+  
     settim = new Date(settim)
+
+
+
+
+
+
+  
+    
+    settim_slot = set_playtime//-4
+    //settim = new Date(settim)
     set_playtime ++
 
         refresh()
@@ -811,7 +826,7 @@ autoplay = false
   ,1000
   )
 
-  },15000)}
+  },1000)}
 
 
 
@@ -839,5 +854,40 @@ fetch(url, {
         console.error('Error fetching data:', error);
     });
 
+
+    const fetchElasticData = async () => {
+    const url = 'http://vpn01.unifiedcommand.com:9200/your-index-name/_search'; // Replace with your index
+    const username = 'your-username'; // Replace with your username
+    const password = 'your-password'; // Replace with your password
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Basic ${btoa(username + ':' + password)}`, // Basic Auth
+        },
+        body: JSON.stringify({
+            query: {
+                match_all: {}, // Replace with your specific query
+            },
+        }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+console.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
+        console.log(data);
+        return data;
+    } else {
+        console.error('Failed to fetch data', response.statusText);
+    }
+};
+
+fetchElasticData();
+
+
+
+
+   d3.select('body').append("button").text("play").on('click',function (){autoplay_starten ()})
   </script>
 </html>

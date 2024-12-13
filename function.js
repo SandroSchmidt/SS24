@@ -718,7 +718,7 @@ mymap.getContainer().addEventListener("touchend", function (e) {
     touchEndY = e.changedTouches[0].clientY;
     ort1 = mymap.containerPointToLatLng([touchStartX,touchStartY]);
     ort2 = mymap.containerPointToLatLng([touchEndX,touchEndY]);
-    console.log("touchend")
+
     minmove = 0.0002
     maxmove = 0.002
     move = Math.abs(ort1.lat - ort2.lat) + Math.abs(ort1.lng - ort2.lng)
@@ -727,7 +727,7 @@ mymap.getContainer().addEventListener("touchend", function (e) {
     www = 5*diff
  
     if(move> minmove && move <maxmove && diff < 4){ 
-  console.log(set_name)
+
       if (locked || deviceversion != fireversion || set_name == "demo" || set_name == "sandro") {
         infotag.text('can not send swipes when -LOCKED-')
         console.log("swipe while locked")
@@ -1070,7 +1070,7 @@ return { zeit: [], usage: [] };
 }
 function writeReportToFirebase() {
   
-console.log(set_area)
+
   d3.select('#lock').style('background-color',"yellow")
   
   if (locked || set_name == "demo" || deviceversion != fireversion) {
