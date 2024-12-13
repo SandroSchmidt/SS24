@@ -452,7 +452,7 @@ realtime =false
                     let col = farbskala[Math.min(10,Math.round(temp.density[settim_slot])*2)]
 
 
-if(current[stages_list[i].name].zeit < settim.getTime()-60*1000*10){fcol="grey";console.log("asdnkandlasbdlasbdlkjfkjbfdkjbgkjdfbs")}
+//if(current[stages_list[i].name].zeit < settim.getTime()-60*1000*10){fcol="grey";console.log("asdnkandlasbdlasbdlkjfkjbfdkjbgkjdfbs")}
 
                   if(Math.min(10,Math.round(temp.density[settim_slot])*2) > 0  )
                   {  stages_list[i].geo.setStyle({
@@ -790,7 +790,7 @@ autoplay = false
     realtime = true
     refresh()
   
-}, 60000);
+}, 6000000);
 
 
   function autoplay_starten (){
@@ -855,36 +855,7 @@ fetch(url, {
     });
 
 
-    const fetchElasticData = async () => {
-    const url = 'http://vpn01.unifiedcommand.com:9200/your-index-name/_search'; // Replace with your index
-    const username = 'your-username'; // Replace with your username
-    const password = 'your-password'; // Replace with your password
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(username + ':' + password)}`, // Basic Auth
-        },
-        body: JSON.stringify({
-            query: {
-                match_all: {}, // Replace with your specific query
-            },
-        }),
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-console.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
-        console.log(data);
-        return data;
-    } else {
-        console.error('Failed to fetch data', response.statusText);
-    }
-};
-
-fetchElasticData();
-
+ 
 
 
 

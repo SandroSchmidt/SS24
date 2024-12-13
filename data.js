@@ -1,4 +1,4 @@
-graphlinkegrenze = 16
+graphlinkegrenze = 17
 graphbreiteinviertelstunden = 48//(28-graphlinkegrenze)*4
 incident_toggle =true
 overridedisplay9 = false

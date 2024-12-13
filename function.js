@@ -124,7 +124,7 @@ showline:true,
          
   // Format for displaying date on x-axis
 //range: [a, b],
-range: ['2024-12-12 '+ (graphlinkegrenze-1) +':59:00', '2024-12-13 04:00:00'],
+range: ['2024-12-12 '+ (graphlinkegrenze-1) +':59:00', '2024-12-13 05:01:00'],
 linecolor: 'black',
 linewidth: 2,
 mirror: true
