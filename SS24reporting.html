@@ -51,12 +51,14 @@
     
         if(set_name == 'medical'||set_name == 'demo'|| set_name == 'markB')
     {locked = true;d3.select('#lock').style('background-color','yellow').text('LOCKED')
-
+    
+    
+    
  
     }
     else{locked = false; d3.select('#lock').text('UNLOCKED')
     setTimeout(function (){d3.select('#lock').style('background-color','green')},800)
-
+d3.select('sendrepbut').style('width','auto')
     }
       
        // d3.select('#map_div').style('height','500px')       
@@ -121,7 +123,7 @@
 
 
 </td>
-      <td><button onclick="jetzt = new Date();writeReportToFirebase()">send report</button>
+      <td><button id="sendrepbut" onclick="jetzt = new Date();writeReportToFirebase()">send report</button>
        
       </td>
       <td>
@@ -140,7 +142,7 @@
 
   <hr>
   
-  <p id="infotag">Version 1.1 - loaded</p>
+  <p id="infotag">Version - loaded</p>
 </div>
  
 </body>
@@ -416,7 +418,7 @@ for (i=0;i<farbskala.length;i++){
   md.append('p').style('background-color',farbskala[i]).text("density:" + i + " / usage: " + i * 10 + " %")
 
 }}
-
+d3.select('sendrepbut').style('width','0px')
   </script>
 
 </html>

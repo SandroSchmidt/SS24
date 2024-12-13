@@ -19,8 +19,8 @@ farbskala = [
   "#FFFF00","#FF9201","#FF9201","#FF0000",'red',"#ee00ff","#ee00ff",
   "#ee00ff","#ee00ff","#ee00ff"
 ]
-list_of_reporters = ["demo","sandro","marcel","medical","mark",
-"marc","dave","sascha","anto","olly","sjors","conor","jasja","dessie","neil","claire","colm","ger","ian","martin","eric","peter"]
+list_of_reporters = [
+"aideen","keith","marc","dave","sascha","anto","olly","sjors","conor","jasja","dessie","neil","claire","colm","ger","ian","martin","eric","peter","demo","sandro","marcel","medical","mark"]
 //list_of_credentials= ["none","s","m","none","none", "m","d","s","a","o","s","c","j","d","n","c","c","g","i","m","e","p"]
 selected_area={id:0,name:"Big Beast Left"}
 jetzt = new Date()
