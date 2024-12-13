@@ -665,11 +665,11 @@ if(key != "Playground")
   line: {shape: 'spline',color: "steelblue"},
   type: 'scatter'  
   })
-  /*
+  
   data.push(
   {
-  x:  graphdata["Big Beast Left"].zeit, //neu graph_data[selected_area.id].data_time,
-  y:  referens_daten.usage, //neu graph_data[selected_area.id].data,
+  x:  reference_data.zeit, //neu graph_data[selected_area.id].data_time,
+  y:  reference_data.sum, //neu graph_data[selected_area.id].data,
 
   yaxis:"y1",
 
@@ -678,7 +678,7 @@ if(key != "Playground")
   name: "Reference Data",
   line: {shape: 'spline',color:"black",dash: 'dashdot'},
   type: 'scatter'    })
-  */
+  
   initialise_chart(data,"usage")     
   }
   d3.select("#timeslider").attr('max',graphbreiteinviertelstunden)
