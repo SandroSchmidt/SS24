@@ -605,7 +605,7 @@ reference_data = {
 reference_data.sum = []
 for(po =0;po<reference_data["zeit"].length;po++)
 {
-  reference_data.zeit[po]=reference_data["zeit"][po]+(24*60*60*1000)
+  reference_data.zeit[po]=reference_data["zeit"][po]+(2*24*60*60*1000)
   reference_data.sum.push(reference_data["IN"][po] - reference_data["OUT"][po])
 }
 
