@@ -669,6 +669,7 @@ if(key != "Playground")
   })
 
   data.push(
+    
   {
   x:  reference_data.zeit, //neu graph_data[selected_area.id].data_time,
   y:  reference_data.sum, //neu graph_data[selected_area.id].data,
@@ -679,6 +680,21 @@ if(key != "Playground")
   mode: 'lines',
   name: "day 1 - 2024",
   line: {shape: 'spline',color:"black",dash: 'dashdot'},
+  type: 'scatter'    })
+
+
+  data.push(
+    
+  {
+  x:  reference_data_day2.zeit, //neu graph_data[selected_area.id].data_time,
+  y:  reference_data_day2.sum, //neu graph_data[selected_area.id].data,
+
+  yaxis:"y1",
+
+
+  mode: 'lines',
+  name: "day 2 - 2024",
+  line: {shape: 'spline',color:"orange",dash: 'dashdot'},
   type: 'scatter'    })
   initialise_chart(data,"usage")     
   }
